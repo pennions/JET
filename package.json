@@ -1,0 +1,14 @@
+{
+  "name": "@pennions/templating_engine",
+  "version": "0.1.0",
+  "description": "A fast templating service inspired by doT.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Jelmer Veen <https://github.com/pennions>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
