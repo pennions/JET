@@ -1,1 +1,1 @@
-# Fast templating Service
+# Fast Templating Service
