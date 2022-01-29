@@ -1,8 +1,8 @@
 {
-  "name": "@pennions/templating_engine",
+  "name": "@pennions/jet",
   "version": "0.1.0",
-  "description": "A fast templating service inspired by doT.js",
-  "main": "index.js",
+  "description": "A semantic templating engine inspired by doT.js",
+  "main": "jet.js",
   "scripts": {
     "test": "jest"
   },

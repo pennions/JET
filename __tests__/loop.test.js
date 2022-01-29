@@ -1,6 +1,13 @@
-const interpolateLoop = require('../functions/loop');
+let interpolateLoop;
 
 describe('Resolve loops', () => {
+
+    beforeEach(() => {
+        // need to reset modules, else there is some remnants in jest memory, which causes it to fail
+        jest.resetModules();
+        interpolateLoop = require('../functions/loop');
+    });
+
     it('adds values from an array property in the given object in the template', () => {
         const template = "<ul>{{% for prop of item  <li>{{prop}}</li> %}}</ul>";
 

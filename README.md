@@ -1,1 +1,2 @@
-# Fast Templating Service
+# JET
+JET stands for Just Easy Templating
