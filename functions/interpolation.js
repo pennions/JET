@@ -9,6 +9,19 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
+function getProperty(property, object) {
+    const propertyTrail = property.split('.');
+
+    let templateItem = '';
+
+    for (const prop of propertyTrail) {
+
+        if (!templateItem) templateItem = object[prop];
+        else templateItem = templateItem[prop];
+    }
+    return templateItem;
+}
+
 function interpolate(template, object) {
     return template.replace(interpolateRegex, (_, p1) => {
         let replacement = '';
@@ -21,15 +34,7 @@ function interpolate(template, object) {
             p1 = p1.substring(1).trim();
         }
 
-        const propertyTrail = p1.split('.');
-
-        let templateItem = '';
-
-        for (const prop of propertyTrail) {
-
-            if (!templateItem) templateItem = object[prop];
-            else templateItem = templateItem[prop];
-        }
+        let templateItem = getProperty(p1, object);
 
         if (templateItem) {
             replacement = templateItem;
@@ -39,4 +44,7 @@ function interpolate(template, object) {
     });
 }
 
-module.exports = interpolate;
+module.exports = {
+    interpolate,
+    getProperty
+};

@@ -1,5 +1,6 @@
 let resolveLoop;
 
+
 describe('Resolve loops', () => {
 
     beforeEach(() => {
@@ -14,7 +15,7 @@ describe('Resolve loops', () => {
         const templateObject = {
             item: ["Item1", "Item2", "Item3"],
         };
-                
+
         expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{item.0}}</li><li>{{item.1}}</li><li>{{item.2}}</li></ul>");
     });
 
@@ -26,5 +27,15 @@ describe('Resolve loops', () => {
         };
 
         expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{item.0.label}}</li><li>{{item.1.label}}</li><li>{{item.2.label}}</li></ul>");
+    });
+
+    it('resolves multi-loop', () => {
+        const template = "<div>TestDiv</div>{{% for item of list <ul>{{% for object of item  <li>{{object.label}}</li> %}}</ul> %}}";
+
+        const templateObject = {
+            list: [[{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }]],
+        };
+
+        expect(resolveLoop(template, templateObject)).toBe("<div>TestDiv</div><ul><li>{{list.0.0.label}}</li><li>{{list.0.1.label}}</li><li>{{list.0.2.label}}</li></ul>");
     });
 });
