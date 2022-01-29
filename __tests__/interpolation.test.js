@@ -27,4 +27,14 @@ describe('Template variable interpolation', () => {
 
         expect(interpolate(template, templateObject)).toBe('<div>Great! Nested interpolation works.</div>');
     });
+
+    it('can escape html', () => {
+        const template = "<pre><code>{{! myExample }}</code></pre>";
+
+        const templateObject = {
+            myExample: '<p>This HTML is for a code example</p>',
+        };
+
+        expect(interpolate(template, templateObject)).toBe('<pre><code>&lt;p&gt;This HTML is for a code example&lt;/p&gt;</code></pre>');
+    });
 });
