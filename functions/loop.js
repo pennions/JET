@@ -1,11 +1,14 @@
-const interpolate = require('./interpolation');
+const detectLogic = /\{\{%([\s\S]+?)%\}\}/mi;
+const cleanLoopRegex = / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/mi;
+const popertyOfLoopedObjectRegex = /for([\s\S]+?)of/mi;
+const propertyOfMainObjectRegex = /of([\s\S]+?)(?=<|{)/mi;
 
-const detectLogic = /\{\{%([\s\S]+?)%\}\}/gmi;
-const cleanLoopRegex = / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/gmi;
-const popertyOfLoopedObjectRegex = /for([\s\S]+?)of/gmi;
-const propertyOfMainObjectRegex = /of([\s\S]+?)(?=<|{)/gmi;
+// Create a property trail that can be interpolated
+function replacePropWithTrail(template, prop, trail) {
+    return template.replace(prop, trail);
+}
 
-function interpolateLoop(template, object) {
+function resolveLoop(template, object) {
 
     if (!detectLogic.test(template)) return template;
 
@@ -18,20 +21,13 @@ function interpolateLoop(template, object) {
         let replacement = '';
         let template = p1.replace(cleanLoopRegex, '').trim();
 
-        const isObject = typeof item[0] === 'object';
-
-        // use object interpolation
-        if (isObject) {
-            for (const object of item) {
-                replacement += interpolate(template, object);
-            }
-        } else {
-            for (const value of item) {
-                replacement += interpolate(template, { [prop]: value });
-            }
+        for (const index in item) {
+            replacement += replacePropWithTrail(template, prop, `${mainProp}.${index}`);
         }
+
         return replacement;
     });
 }
 
-module.exports = interpolateLoop;
+
+module.exports = resolveLoop;;
