@@ -1,12 +1,6 @@
-let resolveConditional;
+const resolveConditional = require('../functions/conditional');
 
 describe('Resolve conditionals', () => {
-
-    beforeEach(() => {
-        // need to reset modules, else there is some remnants in jest memory, which causes it to fail
-        jest.resetModules();
-        resolveConditional = require('../functions/conditional');
-    });
 
     it('should  return a template if truthyCheck is true', () => {
         const template = "{{~ if item is I exist  <p>{{item}}</p> ~}}";

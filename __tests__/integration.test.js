@@ -1,18 +1,9 @@
 const templating = require("../functions/templating");
-
-let resolveLoop;
-let interpolate;
-let resolveConditional;
+const resolveLoop = require('../functions/loop');
+const interpolate = require('../functions/interpolation');
+const resolveConditional = require('../functions/conditional');
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
-
-    beforeEach(() => {
-        // need to reset modules, else there is some remnants in jest memory, which causes it to fail
-        jest.resetModules();
-        resolveLoop = require('../functions/loop');
-        resolveConditional = require('../functions/conditional');
-        interpolate = require('../functions/interpolation');
-    });
 
     it('correctly renders an array', () => {
         const template = "<ul>{{% for prop of item  <li>{{prop}}</li> %}}</ul>";

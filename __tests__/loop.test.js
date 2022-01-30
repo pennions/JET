@@ -1,12 +1,6 @@
-let resolveLoop;
+const resolveLoop = require('../functions/loop');
 
 describe('Resolve loops', () => {
-
-    beforeEach(() => {
-        // need to reset modules, else there is some remnants in jest memory, which causes it to fail
-        jest.resetModules();
-        resolveLoop = require('../functions/loop');
-    });
 
     it('adds a trail to the values from an array property in the given object in the template', () => {
         const template = "<ul>{{% for prop of item  <li>{{prop}}</li> %}}</ul>";

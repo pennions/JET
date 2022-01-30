@@ -4,7 +4,7 @@
  *          but preserved inside elements
  */
 function cleanHtml(template) {
-    return template.trim().replace(/[>](\s+)[<\/]/gmi, '><');
+    return template.trim().replace(/[>](\s+)[<]/gmi, '><');
 }
 
 function escapeHtml(value) {
