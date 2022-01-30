@@ -1,14 +1,17 @@
+const templating = require("../functions/templating");
+
 let resolveLoop;
 let interpolate;
+let resolveConditional;
 
-describe('Resolving and interpolating loops', () => {
+describe('Test inteprolating after resolving conditionals and/or loops', () => {
 
     beforeEach(() => {
         // need to reset modules, else there is some remnants in jest memory, which causes it to fail
         jest.resetModules();
         resolveLoop = require('../functions/loop');
-        const interpolationModule = require('../functions/interpolation');
-        interpolate = interpolationModule.interpolate;
+        resolveConditional = require('../functions/conditional');
+        interpolate = require('../functions/interpolation');
     });
 
     it('correctly renders an array', () => {
@@ -35,7 +38,7 @@ describe('Resolving and interpolating loops', () => {
         expect(interpolate(resolvedTemplate, templateObject)).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
-    it('renders a multi-loop correctly', () => {
+    it('renders a nested loop correctly', () => {
         const template = "<div>TestDiv</div>{{% for item of list <ul>{{% for object of item  <li>{{object.label}}</li> %}}</ul> %}}";
 
         const templateObject = {
@@ -43,5 +46,60 @@ describe('Resolving and interpolating loops', () => {
         };
         const resolvedTemplate = resolveLoop(template, templateObject);
         expect(interpolate(resolvedTemplate, templateObject)).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+    });
+
+    it('renders a nested loop correctly if it is multi-line', () => {
+        const template = `
+<div>TestDiv</div>
+{{% for item of list 
+    <ul>
+    {{% for object of item  
+        <li>{{object.label}}</li> 
+    %}}
+    </ul> 
+%}}`;
+
+        const templateObject = {
+            list: [[{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }]],
+        };
+        let resolvedTemplate = resolveLoop(template, templateObject);
+        resolvedTemplate = templating.cleanHtml(resolvedTemplate);
+
+        expect(interpolate(resolvedTemplate, templateObject)).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+    });
+
+    it('renders a nested if correctly', () => {
+        const template = "{{~ if item <h1>Some item:</h1>{{~ if item.label <p>{{item.label}}</p> ~}} ~}}";
+
+        const templateObject = {
+            item: {
+                label: 'Nested is tested'
+            }
+        };
+
+        const resolvedTemplate = resolveConditional(template, templateObject);
+
+        expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item:</h1> <p>Nested is tested</p>");
+    });
+
+    it('renders a nested if correctly when template is multi-line', () => {
+        const template = `
+{{~ if item 
+    <h1>Some item: </h1>
+    {{~ if item.label 
+        <p>{{item.label}}</p> 
+    ~}}
+~}}`;
+
+        const templateObject = {
+            item: {
+                label: 'Nested is tested'
+            }
+        };
+
+        let resolvedTemplate = resolveConditional(template, templateObject);
+        resolvedTemplate = templating.cleanHtml(resolvedTemplate);
+
+        expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item: </h1><p>Nested is tested</p>");
     });
 });

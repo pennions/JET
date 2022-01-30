@@ -1,26 +1,6 @@
+const { escapeHtml, getPropertyValue } = require("../functions/templating");
+
 const interpolateRegex = /\{\{([\s\S]+?)\}\}/gmi;
-
-function escapeHtml(value) {
-    return value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function getPropertyValue(property, object) {
-    const propertyTrail = property.split('.');
-
-    let templateItem = '';
-
-    for (const prop of propertyTrail) {
-
-        if (!templateItem) templateItem = object[prop];
-        else templateItem = templateItem[prop];
-    }
-    return templateItem;
-}
 
 function interpolate(template, object) {
     return template.replace(interpolateRegex, (_, p1) => {
@@ -40,11 +20,10 @@ function interpolate(template, object) {
             replacement = templateItem;
         }
 
+        replacement = replacement.trim();
+
         return encode ? escapeHtml(replacement) : replacement;
     });
 }
 
-module.exports = {
-    interpolate,
-    getPropertyValue
-};
+module.exports = interpolate;

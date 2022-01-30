@@ -1,9 +1,9 @@
-const { getPropertyValue } = require('../functions/interpolation');
+const { getPropertyValue } = require('../functions/templating');
 
-const detectLogic = /\{\{~([\s\S]+?)~\}\}/gmi;
-const popertyToCheckRegex = /if([\s\S]+?)\s|is|not/gmi;
-const checkTrue = /is([\s\S]+?)(\n|<|{)/gmi;
-const checkFalse = /not([\s\S]+?)(\n|<|{)/gmi;
+const detectConditional = /\{\{~([\s\S]+?)~\}\}/mi;
+const popertyToCheckRegex = /if([\s\S]+?)\s|is|not/mi;
+const checkTrue = /is([\s\S]+?)(\n|<|{)/mi;
+const checkFalse = /not([\s\S]+?)(\n|<|{)/mi;
 
 const cleanupTemplate = (prop, template) => {
     // in case a property has spaces
@@ -14,7 +14,6 @@ const cleanupTemplate = (prop, template) => {
     template = template.replace(cleanupFirstPart, '').replace(/\~\}\}/mi, '');
 
     return template.trim();
-
 };
 
 const cleanupTemplateWithDefined = (prop, template) => {
@@ -25,9 +24,9 @@ const cleanupTemplateWithDefined = (prop, template) => {
     return template.trim();
 };
 
-function processConditional(template, object) {
+function resolveConditional(template, object) {
 
-    if (!detectLogic.test(template)) return template;
+    if (!detectConditional.test(template)) return template;
 
     let truthyCheck = checkTrue.exec(template);
     let falsyCheck = checkFalse.exec(template);
@@ -55,7 +54,7 @@ function processConditional(template, object) {
         renderTemplate = propertyValue ? cleanupTemplateWithDefined(validateProp, template) : '';
     }
 
-    return renderTemplate;
+    return resolveConditional(renderTemplate, object);
 }
 
-module.exports = processConditional;
+module.exports = resolveConditional;

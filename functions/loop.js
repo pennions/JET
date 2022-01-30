@@ -1,4 +1,4 @@
-const { getPropertyValue } = require('../functions/interpolation');
+const { getPropertyValue } = require('../functions/templating');
 
 const detectLogic = /\{\{%([\s\S]+?)%\}\}/mi;
 const cleanLoopRegex = / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/mi;
@@ -32,7 +32,7 @@ function resolveLoop(template, object) {
         replacement += replacePropWithTrail(cleanedTemplate, prop, `${mainProp}.${index}`);
     }
 
-    let newTemplate = template.replace(insideLoop, replacement);
+    let newTemplate = template.replace(insideLoop, replacement).trim();
 
 
     return resolveLoop(newTemplate, object);

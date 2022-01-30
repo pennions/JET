@@ -1,11 +1,11 @@
-let processConditional;
+let resolveConditional;
 
 describe('Resolve conditionals', () => {
 
     beforeEach(() => {
         // need to reset modules, else there is some remnants in jest memory, which causes it to fail
         jest.resetModules();
-        processConditional = require('../functions/conditional');
+        resolveConditional = require('../functions/conditional');
     });
 
     it('should  return a template if truthyCheck is true', () => {
@@ -15,7 +15,7 @@ describe('Resolve conditionals', () => {
             item: 'I exist'
         };
 
-        expect(processConditional(template, templateObject)).toBe("<p>{{item}}</p>");
+        expect(resolveConditional(template, templateObject)).toBe("<p>{{item}}</p>");
     });
 
     it('should return a template if property exists ', () => {
@@ -25,7 +25,7 @@ describe('Resolve conditionals', () => {
             item: 'I exist'
         };
 
-        expect(processConditional(template, templateObject)).toBe("<p>{{item}}</p>");
+        expect(resolveConditional(template, templateObject)).toBe("<p>{{item}}</p>");
     });
 
     it('should not return a template if truthyCheck is false', () => {
@@ -35,7 +35,7 @@ describe('Resolve conditionals', () => {
             item: false
         };
 
-        expect(processConditional(template, templateObject)).toBe("");
+        expect(resolveConditional(template, templateObject)).toBe("");
     });
 
     it('should return the same template if an if statement is not found', () => {
@@ -45,7 +45,7 @@ describe('Resolve conditionals', () => {
             item: false
         };
 
-        expect(processConditional(template, templateObject)).toBe(template);
+        expect(resolveConditional(template, templateObject)).toBe(template);
     });
 
     it('returns the nested if when conditional is true', () => {
@@ -57,7 +57,7 @@ describe('Resolve conditionals', () => {
             }
         };
 
-        expect(processConditional(template, templateObject)).toBe("<h1>Some item:</h1>  {{~ if item.label <p>{{item.label}}</p>  ~}}");
+        expect(resolveConditional(template, templateObject)).toBe("<h1>Some item:</h1>   <p>{{item.label}}</p>");
     });
 
     it('can resolve a property trail', () => {
@@ -69,6 +69,6 @@ describe('Resolve conditionals', () => {
             }
         };
 
-        expect(processConditional(template, templateObject)).toBe("<p>{{item.label}}</p>");
+        expect(resolveConditional(template, templateObject)).toBe("<p>{{item.label}}</p>");
     });
 });
