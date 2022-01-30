@@ -9,7 +9,7 @@ describe('Resolve conditionals', () => {
     });
 
     it('should  return a template if truthyCheck is true', () => {
-        const template = "{{% if item is I exist  <p>{{item}}</p> %}}";
+        const template = "{{~ if item is I exist  <p>{{item}}</p> ~}}";
 
         const templateObject = {
             item: 'I exist'
@@ -19,7 +19,7 @@ describe('Resolve conditionals', () => {
     });
 
     it('should return a template if property exists ', () => {
-        const template = "{{% if item <p>{{item}}</p> %}}";
+        const template = "{{~ if item <p>{{item}}</p> ~}}";
 
         const templateObject = {
             item: 'I exist'
@@ -29,7 +29,7 @@ describe('Resolve conditionals', () => {
     });
 
     it('should not return a template if truthyCheck is false', () => {
-        const template = "{{% if item is true <p>{{item}}</p> %}}";
+        const template = "{{~ if item is true <p>{{item}}</p> ~}}";
 
         const templateObject = {
             item: false
@@ -46,5 +46,29 @@ describe('Resolve conditionals', () => {
         };
 
         expect(processConditional(template, templateObject)).toBe(template);
+    });
+
+    it('returns the nested if when conditional is true', () => {
+        const template = "{{~ if item <h1>Some item:</h1>  {{~ if item.label <p>{{item.label}}</p> ~}} ~}}";
+
+        const templateObject = {
+            item: {
+                label: 'Nested is tested'
+            }
+        };
+
+        expect(processConditional(template, templateObject)).toBe("<h1>Some item:</h1>  {{~ if item.label <p>{{item.label}}</p>  ~}}");
+    });
+
+    it('can resolve a property trail', () => {
+        const template = "{{~ if item.label <p>{{item.label}}</p> ~}}";
+
+        const templateObject = {
+            item: {
+                label: 'Trail is tested'
+            }
+        };
+
+        expect(processConditional(template, templateObject)).toBe("<p>{{item.label}}</p>");
     });
 });

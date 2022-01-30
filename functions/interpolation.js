@@ -9,7 +9,7 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-function getProperty(property, object) {
+function getPropertyValue(property, object) {
     const propertyTrail = property.split('.');
 
     let templateItem = '';
@@ -34,7 +34,7 @@ function interpolate(template, object) {
             p1 = p1.substring(1).trim();
         }
 
-        let templateItem = getProperty(p1, object);
+        let templateItem = getPropertyValue(p1, object);
 
         if (templateItem) {
             replacement = templateItem;
@@ -46,5 +46,5 @@ function interpolate(template, object) {
 
 module.exports = {
     interpolate,
-    getProperty
+    getPropertyValue
 };

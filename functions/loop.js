@@ -1,4 +1,4 @@
-const { getProperty } = require('../functions/interpolation');
+const { getPropertyValue } = require('../functions/interpolation');
 
 const detectLogic = /\{\{%([\s\S]+?)%\}\}/mi;
 const cleanLoopRegex = / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/mi;
@@ -19,10 +19,9 @@ function resolveLoop(template, object) {
     const endOfLoop = template.lastIndexOf('%}}');
     const insideLoop = template.substring(startOfLoop, endOfLoop + 3);
 
-
     // Getting the complete regex, we need the 2nd part and trim whitespaces
     const mainProp = propertyOfMainObjectRegex.exec(insideLoop)[1].trim();
-    const item = getProperty(mainProp, object);
+    const item = getPropertyValue(mainProp, object);
 
     const prop = propertyOfLoopedObjectRegex.exec(insideLoop)[1].trim();
 

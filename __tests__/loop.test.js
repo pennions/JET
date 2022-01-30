@@ -1,6 +1,5 @@
 let resolveLoop;
 
-
 describe('Resolve loops', () => {
 
     beforeEach(() => {
@@ -29,7 +28,7 @@ describe('Resolve loops', () => {
         expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{item.0.label}}</li><li>{{item.1.label}}</li><li>{{item.2.label}}</li></ul>");
     });
 
-    it('resolves multi-loop', () => {
+    it('resolves nested loop', () => {
         const template = "<div>TestDiv</div>{{% for item of list <ul>{{% for object of item  <li>{{object.label}}</li> %}}</ul> %}}";
 
         const templateObject = {
