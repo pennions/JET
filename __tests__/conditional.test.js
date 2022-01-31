@@ -32,6 +32,16 @@ describe('Resolve conditionals', () => {
         expect(resolveConditional(template, templateObject)).toBe("");
     });
 
+    it('should return a template if falsyCheck is true', () => {
+        const template = "{{~ if item not true <p>{{item}}</p> ~}}";
+
+        const templateObject = {
+            item: false
+        };
+
+        expect(resolveConditional(template, templateObject)).toBe("<p>{{item}}</p>");
+    });
+
     it('should return the same template if an if statement is not found', () => {
         const template = "<p>{{item}}</p>";
 
@@ -51,7 +61,7 @@ describe('Resolve conditionals', () => {
             }
         };
 
-        expect(resolveConditional(template, templateObject)).toBe("<h1>Some item:</h1>   <p>{{item.label}}</p>");
+        expect(resolveConditional(template, templateObject)).toBe("<h1>Some item:</h1>  <p>{{item.label}}</p>");
     });
 
     it('can resolve a property trail', () => {

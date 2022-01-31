@@ -55,8 +55,9 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
         };
         let resolvedTemplate = resolveLoop(template, templateObject);
         resolvedTemplate = templating.cleanHtml(resolvedTemplate);
+        const renderedTemplate = interpolate(resolvedTemplate, templateObject);
 
-        expect(interpolate(resolvedTemplate, templateObject)).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(renderedTemplate).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('renders a nested if correctly', () => {
@@ -70,7 +71,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
 
         const resolvedTemplate = resolveConditional(template, templateObject);
 
-        expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item:</h1> <p>Nested is tested</p>");
+        expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item:</h1><p>Nested is tested</p>");
     });
 
     it('renders a nested if correctly when template is multi-line', () => {
