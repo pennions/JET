@@ -7,7 +7,6 @@ function resolvePartials(template, object) {
 
         p1 = p1.trim();
 
-
         let templateItem = getPropertyValue(p1, object);
 
         if (templateItem) {
