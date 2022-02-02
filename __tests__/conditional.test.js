@@ -1,4 +1,4 @@
-const resolveConditional = require('../functions/conditional');
+const resolveConditional = require('../src/functions/conditional');
 
 describe('Resolve conditionals', () => {
 

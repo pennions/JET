@@ -1,9 +1,8 @@
-const { escapeHtml, getPropertyValue } = require("../functions/templating");
-
-const interpolateRegex = /\{\{([\s\S]+?)\}\}/gmi;
+const { propertyRegex } = require("../regexes/templateRegexes");
+const { escapeHtml, getPropertyValue } = require("./templating");
 
 function interpolate(template, object) {
-    return template.replace(interpolateRegex, (_, p1) => {
+    return template.replace(propertyRegex, (_, p1) => {
         let replacement = '';
 
         p1 = p1.trim();

@@ -1,6 +1,6 @@
 
-const resolvePartials = require('../functions/partial');
-const { cleanHtml } = require("../functions/templating");
+const resolvePartials = require('../src/functions/partial');
+const { cleanHtml } = require("../src/functions/templating");
 
 const template = `<body>
     {{# partials.navbar }}

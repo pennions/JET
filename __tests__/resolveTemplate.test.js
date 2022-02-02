@@ -1,5 +1,5 @@
-const resolveTemplate = require('../functions/resolveTemplate');
-const { cleanHtml } = require("../functions/templating");
+const resolveTemplate = require('../src/functions/resolveTemplate');
+const { cleanHtml } = require("../src/functions/templating");
 
 const template = `
 <main>

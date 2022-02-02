@@ -1,4 +1,4 @@
-const resolveLoop = require('../functions/loop');
+const resolveLoop = require('../src/functions/loop');
 
 describe('Resolve loops', () => {
 

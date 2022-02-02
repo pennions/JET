@@ -1,7 +1,7 @@
-const templating = require("../functions/templating");
-const resolveLoop = require('../functions/loop');
-const interpolate = require('../functions/interpolation');
-const resolveConditional = require('../functions/conditional');
+const templating = require("../src/functions/templating");
+const resolveLoop = require('../src/functions/loop');
+const interpolate = require('../src/functions/interpolation');
+const resolveConditional = require('../src/functions/conditional');
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
 

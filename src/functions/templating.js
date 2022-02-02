@@ -1,10 +1,12 @@
+const { cleanHtmlRegex, trailRegex, conditionalPropertyRegex, loopListPropertyRegex } = require("../regexes/templateRegexes");
+
 /**
  * @param {string} template
  * @returns html string with whitespace cleaned between elements
  *          but preserved inside elements
  */
 function cleanHtml(template) {
-    return template.trim().replace(/[>](\s+)[<]/gmi, '><');
+    return template.trim().replace(cleanHtmlRegex, '><');
 }
 
 function escapeHtml(value) {
@@ -27,6 +29,24 @@ function getPropertyValue(property, object) {
         else templateItem = templateItem[prop];
     }
     return templateItem;
+}
+
+// Create a property trail that can be interpolated
+function replacePropWithTrail(template, prop, trail) {
+    if (prop.includes('.')) trail = `${prop}.${trail}`;
+    let replacedTemplate = template.replace(trailRegex, (match) => {
+        return match.replace(prop, trail);
+    });
+
+    // also replace the properties of an if within a loop, to match up correctly
+    replacedTemplate = replacedTemplate.replace(conditionalPropertyRegex, (match) => {
+        return match.replace(prop, trail);
+    });
+
+    // do the same for nested loops
+    return replacedTemplate.replace(loopListPropertyRegex, (match) => {
+        return match.replace(prop, trail);
+    });
 }
 
 function getTemplate(templatingToken, template) {
@@ -55,5 +75,6 @@ module.exports = {
     escapeHtml,
     getPropertyValue,
     getTemplate,
-    getInnerTemplate
+    getInnerTemplate,
+    replacePropWithTrail
 };

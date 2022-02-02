@@ -1,6 +1,6 @@
 const resolvePartials = require("./partial");
-const resolveLoop = require('../functions/loop');
-const resolveConditional = require('../functions/conditional');
+const resolveLoop = require('./loop');
+const resolveConditional = require('./conditional');
 
 function resolveTemplate(template, viewModel) {
     let newTemplate = resolvePartials(template, viewModel);

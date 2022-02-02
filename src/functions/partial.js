@@ -1,6 +1,5 @@
+const { partialRegex } = require("../regexes/templateRegexes");
 const { getPropertyValue } = require("./templating");
-
-const partialRegex = /\{\{#([\s\S]+?)\}\}/gmi;
 
 function resolvePartials(template, object) {
     return template.replace(partialRegex, (_, p1) => {
