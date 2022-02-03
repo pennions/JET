@@ -46,7 +46,7 @@ function resolveConditional(template, object) {
         replacement = propertyValue ? cleanedTemplate : '';
     }
 
-    let newTemplate = template.replace(conditionalTemplate, replacement);
+    const newTemplate = template.replace(conditionalTemplate, replacement);
 
     return resolveConditional(newTemplate, object);
 }
