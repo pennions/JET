@@ -1,7 +1,9 @@
-const { hasLoopRegex, cleanLoopRegex, loopPropertyRegex, loopListPropertyRegex } = require("../regexes/templateRegexes");
-const { getPropertyValue, getTemplate, getInnerTemplate, replacePropWithTrail } = require('./templating');
+import {
+    hasLoopRegex, cleanLoopRegex, loopPropertyRegex, loopListPropertyRegex,
+    getPropertyValue, getTemplate, getInnerTemplate, replacePropWithTrail
+} from "./templating";
 
-function resolveLoop(template, object) {
+export function resolveLoop(template, object) {
 
     if (!hasLoopRegex.test(template)) return template;
 
@@ -24,6 +26,3 @@ function resolveLoop(template, object) {
 
     return resolveLoop(newTemplate, object);
 }
-
-
-module.exports = resolveLoop;;

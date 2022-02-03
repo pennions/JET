@@ -1,13 +1,11 @@
-const resolvePartials = require("./partial");
-const resolveLoop = require('./loop');
-const resolveConditional = require('./conditional');
+import { resolvePartials } from "./partial";
+import { resolveLoop } from "./loop";
+import { resolveConditional } from "./conditional";
 
-function resolveTemplate(template, viewModel) {
-    let newTemplate = resolvePartials(template, viewModel);
-    newTemplate = resolveLoop(template, viewModel);
-    newTemplate = resolveConditional(newTemplate, viewModel);
+export function resolveTemplate(template, viewmodel) {
+    let newTemplate = resolvePartials(template, viewmodel);
+    newTemplate = resolveLoop(template, viewmodel);
+    newTemplate = resolveConditional(newTemplate, viewmodel);
 
     return newTemplate;
 }
-
-module.exports = resolveTemplate;

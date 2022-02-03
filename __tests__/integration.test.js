@@ -1,7 +1,7 @@
-const templating = require("../src/functions/templating");
-const resolveLoop = require('../src/functions/loop');
-const interpolate = require('../src/functions/interpolation');
-const resolveConditional = require('../src/functions/conditional');
+import { cleanHtml } from "../src/functions/templating";
+import { resolveLoop } from "../src/functions/loop";
+import { interpolate } from "../src/functions/interpolation";
+import { resolveConditional } from "../src/functions/conditional";
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
 
@@ -54,7 +54,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             list: [[{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }]],
         };
         let resolvedTemplate = resolveLoop(template, templateObject);
-        resolvedTemplate = templating.cleanHtml(resolvedTemplate);
+        resolvedTemplate = cleanHtml(resolvedTemplate);
         const renderedTemplate = interpolate(resolvedTemplate, templateObject);
 
         expect(renderedTemplate).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
@@ -90,7 +90,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
         };
 
         let resolvedTemplate = resolveConditional(template, templateObject);
-        resolvedTemplate = templating.cleanHtml(resolvedTemplate);
+        resolvedTemplate = cleanHtml(resolvedTemplate);
 
         expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item: </h1><p>Nested is tested</p>");
     });

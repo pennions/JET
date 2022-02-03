@@ -1,14 +1,20 @@
 {
   "name": "@pennions/jet",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A semantic templating engine inspired by doT.js",
-  "main": "jet.js",
+  "main": "./src/jet.js",
   "scripts": {
-    "test": "jest"
+    "build": "rollup --config rollup.config.js",
+    "minify": "uglifyjs --compress --mangle --output dist/jet.min.js dist/jet.js",
+    "test": "jest --collectCoverage"
   },
   "author": "Jelmer Veen <https://github.com/pennions>",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^27.4.7"
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "jest": "^27.4.7",
+    "rollup": "^2.67.0",
+    "uglify-js": "^3.15.0"
   }
 }

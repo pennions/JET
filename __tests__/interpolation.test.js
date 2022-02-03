@@ -1,5 +1,5 @@
 
-const interpolate = require('../src/functions/interpolation');
+import { interpolate } from "../src/functions/interpolation";
 
 const template = "<div>{{ variableB }} {{variableC}} {{variableA}}</div>";
 

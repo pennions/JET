@@ -1,7 +1,6 @@
-const { propertyRegex } = require("../regexes/templateRegexes");
-const { escapeHtml, getPropertyValue } = require("./templating");
+import { propertyRegex, escapeHtml, getPropertyValue } from "./templating";
 
-function interpolate(template, object) {
+export function interpolate(template, object) {
     return template.replace(propertyRegex, (_, p1) => {
         let replacement = '';
 
@@ -24,5 +23,3 @@ function interpolate(template, object) {
         return encode ? escapeHtml(replacement) : replacement;
     });
 }
-
-module.exports = interpolate;

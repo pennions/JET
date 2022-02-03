@@ -1,7 +1,9 @@
-const { hasConditionalRegex, conditionalPropertyRegex, cleanConditionalRegex, conditionalStatementRegex } = require("../regexes/templateRegexes");
-const { getPropertyValue, getTemplate, getInnerTemplate } = require('./templating');
+import {
+    hasConditionalRegex, conditionalPropertyRegex, cleanConditionalRegex, conditionalStatementRegex,
+    getPropertyValue, getTemplate, getInnerTemplate
+} from "./templating";
 
-function resolveConditional(template, object) {
+export function resolveConditional(template, object) {
 
     if (!hasConditionalRegex.test(template)) return template;
 
@@ -23,7 +25,7 @@ function resolveConditional(template, object) {
     let propToValidate = conditionalPropertyRegex.exec(template);
 
     propToValidate = propToValidate[1].trim();
-    propertyValue = getPropertyValue(propToValidate, object);
+    let propertyValue = getPropertyValue(propToValidate, object);
 
     if (propertyValue) {
         propertyValue = propertyValue.toString().toLowerCase();
@@ -50,5 +52,3 @@ function resolveConditional(template, object) {
 
     return resolveConditional(newTemplate, object);
 }
-
-module.exports = resolveConditional;

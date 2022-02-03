@@ -1,7 +1,6 @@
-const { partialRegex } = require("../regexes/templateRegexes");
-const { getPropertyValue } = require("./templating");
+import { partialRegex, getPropertyValue } from "./templating";
 
-function resolvePartials(template, object) {
+export function resolvePartials(template, object) {
     return template.replace(partialRegex, (_, p1) => {
         let replacement = '';
 
@@ -18,5 +17,3 @@ function resolvePartials(template, object) {
         return replacement;
     });
 }
-
-module.exports = resolvePartials;

@@ -1,15 +1,43 @@
-const { cleanHtmlRegex, trailRegex, conditionalPropertyRegex, loopListPropertyRegex } = require("../regexes/templateRegexes");
+import {
+    propertyRegex,
+    cleanHtmlRegex,
+    hasConditionalRegex,
+    conditionalPropertyRegex,
+    cleanConditionalRegex,
+    conditionalStatementRegex,
+    loopPropertyRegex,
+    loopListPropertyRegex,
+    hasLoopRegex,
+    cleanLoopRegex,
+    partialRegex,
+    trailRegex
+} from "../regexes/templateRegexes.js";
+
+export {
+    propertyRegex,
+    cleanHtmlRegex,
+    hasConditionalRegex,
+    conditionalPropertyRegex,
+    cleanConditionalRegex,
+    conditionalStatementRegex,
+    loopPropertyRegex,
+    loopListPropertyRegex,
+    hasLoopRegex,
+    cleanLoopRegex,
+    partialRegex,
+    trailRegex
+};
 
 /**
  * @param {string} template
  * @returns html string with whitespace cleaned between elements
  *          but preserved inside elements
  */
-function cleanHtml(template) {
+export function cleanHtml(template) {
     return template.trim().replace(cleanHtmlRegex, '><');
 }
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
     return value
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -18,7 +46,7 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-function getPropertyValue(property, object) {
+export function getPropertyValue(property, object) {
     const propertyTrail = property.split('.');
 
     let templateItem = '';
@@ -32,7 +60,7 @@ function getPropertyValue(property, object) {
 }
 
 // Create a property trail that can be interpolated
-function replacePropWithTrail(template, prop, trail) {
+export function replacePropWithTrail(template, prop, trail) {
     if (prop.includes('.')) trail = `${prop}.${trail}`;
     let replacedTemplate = template.replace(trailRegex, (match) => {
         return match.replace(prop, trail);
@@ -49,7 +77,7 @@ function replacePropWithTrail(template, prop, trail) {
     });
 }
 
-function getTemplate(templatingToken, template) {
+export function getTemplate(templatingToken, template) {
     const beginTemplate = `{{${templatingToken}`;
     const endTemplate = `${templatingToken}}}`;
 
@@ -65,16 +93,7 @@ function getTemplate(templatingToken, template) {
     return template.substring(start, end + 3);
 }
 
-function getInnerTemplate(template) {
+export function getInnerTemplate(template) {
     // template length minus the three template tokens, e.g. ~}} and a space before
     return template.substring(4, template.length - 4);
 }
-
-module.exports = {
-    cleanHtml,
-    escapeHtml,
-    getPropertyValue,
-    getTemplate,
-    getInnerTemplate,
-    replacePropWithTrail
-};

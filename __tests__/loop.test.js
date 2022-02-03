@@ -1,4 +1,4 @@
-const resolveLoop = require('../src/functions/loop');
+import { resolveLoop } from "../src/functions/loop";
 
 describe('Resolve loops', () => {
 

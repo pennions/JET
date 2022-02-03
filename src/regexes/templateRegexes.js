@@ -1,14 +1,13 @@
-module.exports = {
-    propertyRegex: /\{\{([\s\S]+?)\}\}/gmi,
-    cleanHtmlRegex: /[>](\s+)[<]/gmi,
-    hasConditionalRegex: /\{\{~([\s\S]+?)~\}\}/mi,
-    conditionalPropertyRegex: /if([\s\S]+?)\s|is|not/mi,
-    cleanConditionalRegex: / ?if([\s\S]+?)[is|not]?([\s\S]+?)(?=<|{)/mi,
-    conditionalStatementRegex: /(is|not)([\s\S]+?)(\n|<|{)/mi,
-    loopPropertyRegex: /for([\s\S]+?)of/mi,
-    loopListPropertyRegex: /of([\s\S]+?)(?=<|{)/mi,
-    hasLoopRegex: /\{\{%([\s\S]+?)%\}\}/mi,
-    cleanLoopRegex: / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/mi,
-    partialRegex: /\{\{#([\s\S]+?)\}\}/gmi,
-    trailRegex: /\{\{(.+)\}\}/gmi
-};
+
+export const propertyRegex = /\{\{([\s\S]+?)\}\}/gmi;
+export const cleanHtmlRegex = /[>](\s+)[<]/gmi;
+export const hasConditionalRegex = /\{\{~([\s\S]+?)~\}\}/mi;
+export const conditionalPropertyRegex = /if([\s\S]+?)\s|is|not/mi;
+export const cleanConditionalRegex = / ?if([\s\S]+?)[is|not]?([\s\S]+?)(?=<|{)/mi;
+export const conditionalStatementRegex = /(is|not)([\s\S]+?)(\n|<|{)/mi;
+export const loopPropertyRegex = /for([\s\S]+?)of/mi;
+export const loopListPropertyRegex = /of([\s\S]+?)(?=<|{)/mi;
+export const hasLoopRegex = /\{\{%([\s\S]+?)%\}\}/mi;
+export const cleanLoopRegex = / ?for([\s\S]+?)of([\s\S]+?)(?=<|{)/mi;
+export const partialRegex = /\{\{#([\s\S]+?)\}\}/gmi;
+export const trailRegex = /\{\{(.+)\}\}/gm;
