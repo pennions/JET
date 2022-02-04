@@ -12,6 +12,16 @@ describe('Resolve loops', () => {
         expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{item.0}}</li><li>{{item.1}}</li><li>{{item.2}}</li></ul>");
     });
 
+    it('also works with for ... in ...', () => {
+        const template = "<ul>{{% for prop in array  <li>{{prop}}</li> %}}</ul>";
+
+        const templateObject = {
+            array: ["Item1", "Item2", "Item3"],
+        };
+
+        expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{array.0}}</li><li>{{array.1}}</li><li>{{array.2}}</li></ul>");
+    });
+
     it('adds a trail to the values from an object in an array property in the given object in the template', () => {
         const template = "<ul>{{% for object of item  <li>{{object.label}}</li> %}}</ul>";
 

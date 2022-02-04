@@ -15,7 +15,7 @@ export function resolveLoop(template, object) {
     const loopTemplate = getTemplate('%', template);
 
     // Getting the complete regex, we need the 2nd part and trim whitespaces
-    const mainProp = loopListPropertyRegex.exec(loopTemplate)[1].trim();
+    const mainProp = loopListPropertyRegex.exec(loopTemplate)[2].trim();
     const item = getPropertyValue(mainProp, object);
 
     const prop = loopPropertyRegex.exec(loopTemplate)[1].trim();
