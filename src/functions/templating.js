@@ -61,7 +61,6 @@ export function getPropertyValue(property, object) {
 
 // Create a property trail that can be interpolated
 export function replacePropWithTrail(template, prop, trail) {
-    if (prop.includes('.')) trail = `${prop}.${trail}`;
     let replacedTemplate = template.replace(trailRegex, (match) => {
         return match.replace(prop, trail);
     });

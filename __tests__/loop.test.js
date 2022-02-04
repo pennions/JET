@@ -41,4 +41,16 @@ describe('Resolve loops', () => {
 
         expect(resolveLoop(template, templateObject)).toBe("<div>TestDiv</div><ul><li>{{list.0.0.label}}</li><li>{{list.0.1.label}}</li><li>{{list.0.2.label}}</li></ul>");
     });
+
+    it('resolves a loop from a nested property', () => {
+        const template = "<ul>{{% for item of object.list <li>{{ item.label }}</li> %}}</ul>";
+
+        const templateObject = {
+            object: {
+                list: [{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }],
+            }
+        };
+
+        expect(resolveLoop(template, templateObject)).toBe("<ul><li>{{ object.list.0.label }}</li><li>{{ object.list.1.label }}</li><li>{{ object.list.2.label }}</li></ul>");
+    });
 });

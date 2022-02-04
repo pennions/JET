@@ -94,4 +94,18 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
 
         expect(interpolate(resolvedTemplate, templateObject)).toBe("<h1>Some item: </h1><p>Nested is tested</p>");
     });
+
+    it('renders a loop from a nested property', () => {
+        const template = "<ul>{{% for item of object.list <li>{{ item.label }}</li> %}}</ul>";
+
+        const templateObject = {
+            object: {
+                list: [{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }],
+            }
+        };
+
+        const resolvedTemplate = resolveLoop(template, templateObject);
+
+        expect(interpolate(resolvedTemplate, templateObject)).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+    });
 });
