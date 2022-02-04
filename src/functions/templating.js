@@ -11,7 +11,7 @@ import {
     cleanLoopRegex,
     partialRegex,
     trailRegex
-} from "../regexes/templateRegexes.js";
+} from '../regexes/templateRegexes.js';
 
 export {
     propertyRegex,
@@ -39,11 +39,11 @@ export function cleanHtml(template) {
 
 export function escapeHtml(value) {
     return value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 export function getPropertyValue(property, object) {
@@ -67,9 +67,12 @@ export function replacePropWithTrail(template, prop, trail) {
     });
 
     // also replace the properties of an if within a loop, to match up correctly
-    replacedTemplate = replacedTemplate.replace(conditionalPropertyRegex, (match) => {
-        return match.replace(prop, trail);
-    });
+    replacedTemplate = replacedTemplate.replace(
+        conditionalPropertyRegex,
+        (match) => {
+            return match.replace(prop, trail);
+        }
+    );
 
     // do the same for nested loops
     return replacedTemplate.replace(loopListPropertyRegex, (match) => {

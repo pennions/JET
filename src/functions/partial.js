@@ -1,4 +1,4 @@
-import { partialRegex, getPropertyValue } from "./templating";
+import { partialRegex, getPropertyValue } from './templating';
 
 export function resolvePartials(template, object) {
     return template.replace(partialRegex, (_, p1) => {

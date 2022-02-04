@@ -1,10 +1,14 @@
 import {
-    hasConditionalRegex, conditionalPropertyRegex, cleanConditionalRegex, conditionalStatementRegex,
-    getPropertyValue, getTemplate, getInnerTemplate
-} from "./templating";
+    hasConditionalRegex,
+    conditionalPropertyRegex,
+    cleanConditionalRegex,
+    conditionalStatementRegex,
+    getPropertyValue,
+    getTemplate,
+    getInnerTemplate
+} from './templating';
 
 export function resolveConditional(template, object) {
-
     if (!hasConditionalRegex.test(template)) return template;
 
     // return null if user did not provide an is or not
@@ -31,8 +35,11 @@ export function resolveConditional(template, object) {
         propertyValue = propertyValue.toString().toLowerCase();
     }
 
-    const conditionalTemplate = getTemplate("~", template);
-    const cleanedTemplate = getInnerTemplate(conditionalTemplate).replace(cleanConditionalRegex, '');
+    const conditionalTemplate = getTemplate('~', template);
+    const cleanedTemplate = getInnerTemplate(conditionalTemplate).replace(
+        cleanConditionalRegex,
+        ''
+    );
 
     let replacement = '';
 

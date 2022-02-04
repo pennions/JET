@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "minify": "uglifyjs --compress --mangle --output dist/jet.min.js dist/jet.js",
-    "test": "jest --collectCoverage"
+    "test": "jest --collectCoverage",
+    "lint": "npx prettier -w src/**"
   },
   "author": "Jelmer Veen <https://github.com/pennions>",
   "license": "MIT",
@@ -14,6 +15,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.16.8",
     "@rollup/plugin-commonjs": "^21.0.1",
     "jest": "^27.4.7",
+    "prettier": "2.5.1",
     "rollup": "^2.67.0",
     "uglify-js": "^3.15.0"
   }

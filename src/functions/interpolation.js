@@ -1,4 +1,4 @@
-import { propertyRegex, escapeHtml, getPropertyValue } from "./templating";
+import { propertyRegex, escapeHtml, getPropertyValue } from './templating';
 
 export function interpolate(template, object) {
     return template.replace(propertyRegex, (_, p1) => {
