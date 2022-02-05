@@ -91,4 +91,23 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
         };
         expect(cleanHtml(compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
+
+    it('can render a view with partials', () => {
+        const templateObject = {
+            shoppingList: {
+                groceryStore: ['Carrot', 'Melon', 'Potato'],
+            },
+            username: 'Jet',
+            partials: {
+                shoppingList: `<ul> {{% for item in shoppingList.groceryStore <li> {{ item }} </li> %}} </ul>`,
+                username: `{{~ if username <div>{{ username }}</div> ~}}`
+            }
+        };
+
+        const template = `
+        {{# partials.username #}}
+        {{# partials.shoppingList #}}
+        `;
+        expect(cleanHtml(compile(template, templateObject))).toBe("<div>Jet</div><ul><li> Carrot </li><li> Melon </li><li> Potato </li></ul>");
+    });
 });
