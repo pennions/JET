@@ -18,8 +18,6 @@ For designing this templating engine I've implemented the View and ViewModel par
 The view is build based on the viewmodel, which gives a pre-rendered state.
 Then it can be interpolated (fill in the properties) with the same viewmodel. So if your viewmodel structure never changes, you can re-use the same rendered template even if it's contents changes.
 
-See chapter {X} for pre-rendering
-
 # Viewmodel
 A viewmodel is a JSON object.
 
@@ -53,6 +51,8 @@ const vm = {
 
 You can use the curlybrace (also known as mustachios) to place properties in a template.
 
+JSON model:
+
 ```
 const vm = {
     ...
@@ -79,6 +79,8 @@ Output:
 ```
 
 ### Interpolate nested properties
+
+JSON model:
 
 ```
 const vm = {
@@ -116,7 +118,8 @@ Output:
 
 Loops are kind of the bread and butter of templating. Don't we all know the 'Todo' apps we build in a new language?
 
-Given the example: 
+JSON model:
+
 ```
 const vm = {
     todoList: ['task1', 'task2', 'task3'],
@@ -163,8 +166,8 @@ Output:
 ### Looping over nested properties
 &nbsp;
 
+JSON model:
 
-Given the example: 
 ```
 const vm = {
     ...
@@ -220,7 +223,7 @@ This is implemented as a string comparison on both ways.
 
 > caveat: you need to start your inner template with either a { or a < else it will be used as comparison.
 
-Given the example: 
+JSON model:
 
 ```
     ...
@@ -255,8 +258,7 @@ Output:
 
 ### if x not y
 
-
-Given the example: 
+JSON model:
 
 ```
     ...
@@ -294,7 +296,8 @@ Checks if a property exists in the model and checks if it's value resolves to tr
 
 > **Important:** 0, false, '' and [ ] results are all counted as *false*
 
-Given the example: 
+
+JSON model:
 
 ```
     ...
@@ -302,6 +305,8 @@ Given the example:
     username: 'Jet'
     ... 
 ```
+
+Example template:
 
 ```
 {{~ if isAdmin
@@ -329,8 +334,7 @@ Output:
 
 Partials are uncompiled or precompile templates as a string in your viewmodel.
 
-Given the example: 
-
+JSON model:
 
 ```
 const vm = {
