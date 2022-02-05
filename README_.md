@@ -1,47 +1,32 @@
-<!-- TOC -->
-
-- [1. JET](#1-jet)
-- [2. Design principles:](#2-design-principles)
-- [3. Architecture](#3-architecture)
-- [4. Viewmodel](#4-viewmodel)
-- [5. Features](#5-features)
-    - [5.1. Interpolation](#51-interpolation)
-        - [5.1.1. Interpolate nested properties](#511-interpolate-nested-properties)
-    - [5.2. Loops](#52-loops)
-        - [5.2.1. Looping over nested properties](#521-looping-over-nested-properties)
-    - [5.3. Conditionals](#53-conditionals)
-        - [5.3.1. if x is y](#531-if-x-is-y)
-        - [5.3.2. if x not y](#532-if-x-not-y)
-        - [5.3.3. if x](#533-if-x)
-    - [6. Partials](#6-partials)
-
-<!-- /TOC -->
-
-# 1. JET
+#  JET
+  
 JET stands for Just Easy Templating. I've created this library 
 because I couldn't find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
 and that isn't bulky with too many features. doT.js came very close, but it's syntax was
 bulky.
-
-# 2. Design principles:
-
+  
+#  Design principles:
+  
+  
 - Easy to use
 - Explicit over implicit (inspired from Python)
 - Semantic (easy to remember)
 - Clean (write as little syntax as possible)
 - Logic free (Single responsibility)
-
-# 3. Architecture
+  
+#  Architecture
+  
 For designing this templating engine I've implemented the View and ViewModel part of MVVM (Model View ViewModel).
-
+  
 The view is build based on the viewmodel, which gives a pre-rendered state.
 Then it can be interpolated (fill in the properties) with the same viewmodel. So if your viewmodel structure never changes, you can re-use the same rendered template even if it's contents changes.
-
-# 4. Viewmodel
+  
+#  Viewmodel
+  
 A viewmodel is a JSON object.
-
+  
 Example used in this readme:
-
+  
 ```
 const vm = {
     todoList: ['task1', 'task2', 'task3'],
@@ -56,51 +41,54 @@ const vm = {
     username: 'Jet'
 }
 ```
-
-# 5. Features
-
+  
+#  Features
+  
+  
 - Interpolation
 - Loops
 - Conditionals
     - This contradicts Logic Free, see explanation for the reason
 - Partials
-
-
-## 5.1. Interpolation
-
+  
+  
+##  Interpolation
+  
+  
 You can use the curlybrace (also known as mustachios) to place properties in a template.
-
+  
 JSON model:
-
+  
 ```
 const vm = {
     ...
     username: 'Jet'
 }
 ```
-
+  
 Example template:
-
+  
 ```
 <div>
     <span>Hello </span>
     <span>{{ username }}</span>
 </div>
 ```
-
+  
 Output: 
-
+  
 ```
 <div>
     <span>Hello </span>
     <span>Jet</span>
 </div>
 ```
-
-### 5.1.1. Interpolate nested properties
-
+  
+###  Interpolate nested properties
+  
+  
 JSON model:
-
+  
 ```
 const vm = {
     ...
@@ -114,40 +102,41 @@ const vm = {
     ...
 }
 ```
-
+  
 Example template:
-
+  
 ```
 <div>
     <span>Don't forget to buy: </span>
     <span>{{ shoppingList.bakery.daily.0 }}</span>
 </div>
 ```
-
+  
 Output: 
-
+  
 ```
 <div>
     <span>Don't forget to buy: </span>
     <span>Bread</span>
 </div>
 ```
-
-## 5.2. Loops
-
+  
+##  Loops
+  
+  
 Loops are kind of the bread and butter of templating. Don't we all know the 'Todo' apps we build in a new language?
-
+  
 JSON model:
-
+  
 ```
 const vm = {
     todoList: ['task1', 'task2', 'task3'],
     ...
 }
 ```
-
+  
 Example template:
-
+  
 ```
 <ul>
     {{% for task in todoList
@@ -157,17 +146,17 @@ Example template:
     %}}
 </ul>
 ```
-
+  
 > Supports both for ... in ... as wel as for ... of ...
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <ul>
     <li>
@@ -182,11 +171,12 @@ Output:
 </ul>
 ```
 &nbsp;
-### 5.2.1. Looping over nested properties
+###  Looping over nested properties
+  
 &nbsp;
-
+  
 JSON model:
-
+  
 ```
 const vm = {
     ...
@@ -195,9 +185,9 @@ const vm = {
     ...
 }
 ```
-
+  
 Example template:
-
+  
 ```
 <ul>
     {{% for item in shoppingList.groceryStore
@@ -207,15 +197,15 @@ Example template:
     %}}
 </ul>
 ```
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <ul>
     <li>
@@ -229,21 +219,23 @@ Output:
     </li>
 </ul>
 ```
-
-## 5.3. Conditionals
+  
+##  Conditionals
+  
 Conditionals contradict the principle of 'Logic Free'. However having conditional renderings is a must for it to be easy, as 'being easy' is the top priority it has been implemented. However implementation is in a bare minimum. The following conditions can be checked.
-
+  
 * if x is y
 * if x not y
 * if x
-
-### 5.3.1. if x is y
+  
+###  if x is y
+  
 This is implemented as a string comparison on both ways.
-
+  
 > caveat: you need to start your inner template with either a { or a < else it will be used as comparison.
-
+  
 JSON model:
-
+  
 ```
     ...
     shoppingList: {
@@ -254,107 +246,110 @@ JSON model:
         }
     ... 
 ```
-
+  
 Example template:
-
+  
 ```
 {{~ if shoppingList.bakery.birthday is carrot cake 
     <div>The cake is not a lie!</div>
 ~}}
 ```
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <div>The cake is not a lie!</div>
 ```
-
-### 5.3.2. if x not y
-
+  
+###  if x not y
+  
+  
 JSON model:
-
+  
 ```
     ...
     isAdmin: false
     ... 
 ```
-
+  
 Example template:
-
+  
 ```
 {{~ if isAdmin not true
     <div>Regular user</div>
 ~}}
-
+  
 {{~ if isAdmin is true
     <div>Admin user</div>
 ~}}
 ```
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <div>Regular user</div>
 ```
-
-### 5.3.3. if x
-
+  
+###  if x
+  
+  
 Checks if a property exists in the model and checks if it's value resolves to true with a terniary comparison.
-
+  
 > **Important:** 0, false, '' and [ ] results are all counted as *false*
-
-
+  
+  
 JSON model:
-
+  
 ```
     ...
     isAdmin: false,
     username: 'Jet'
     ... 
 ```
-
+  
 Example template:
-
+  
 ```
 {{~ if isAdmin
     <div>Admin user</div>
 ~}}
-
+  
 {{~ if username
     <div>{{ username }}</div>
 ~}}
 ```
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <div>Jet</div>
 ```
-
-## 6. Partials
-
+  
+###  Partials
+  
+  
 Partials are uncompiled or precompile templates as a string in your viewmodel.
-
+  
 JSON model:
-
+  
 ```
 const vm = {
     todoList: ['task1', 'task2', 'task3'],
@@ -373,15 +368,15 @@ const vm = {
     }
 }
 ```
-
+  
 Run:
-
+  
 ```
 const renderedTemplate = jet.compile(template, vm);
 ```
-
+  
 Output:
-
+  
 ```
 <div>Jet</div>
 <ul>
@@ -390,3 +385,4 @@ Output:
     <li> Potato </li> 
 </ul>
 ```
+  
