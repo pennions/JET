@@ -152,7 +152,7 @@ Output:
 ```
 <ul>
     <li>
-          task1
+        task1
     </li>
     <li>
         task2
