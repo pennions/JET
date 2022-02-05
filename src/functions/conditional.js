@@ -19,7 +19,7 @@ export function resolveConditional(template, object) {
     let comparisonValue = '';
 
     if (conditionalStatement) {
-        const statementCheck = conditionalStatement[1].substring(0, 3).trim();
+        const statementCheck = conditionalStatement[1].substring(0, 4).trim();
 
         truthyCheck = statementCheck === 'is';
         falsyCheck = statementCheck === 'not';

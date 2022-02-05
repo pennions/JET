@@ -1,4 +1,5 @@
 import { resolveConditional } from "../src/functions/conditional";
+import { cleanHtml } from "../src/functions/templating";
 
 describe('Resolve conditionals', () => {
 
@@ -74,5 +75,24 @@ describe('Resolve conditionals', () => {
         };
 
         expect(resolveConditional(template, templateObject)).toBe("<p>{{item.label}}</p>");
+    });
+
+    it('can resolve a property trail that contains an is', () => {
+        const templateObject = {
+            shoppingList: {
+                bakery: {
+                    birthday: 'carrot cake',
+                    daily: ['Bread', 'Cookies']
+                }
+            }
+        };
+
+        const template = `
+        {{~ if shoppingList.bakery.birthday is carrot cake 
+            <div>The cake is not a lie!</div>
+        ~}}`;
+
+
+        expect(cleanHtml(resolveConditional(template, templateObject))).toBe("<div>The cake is not a lie!</div>");
     });
 });

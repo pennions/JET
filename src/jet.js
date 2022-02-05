@@ -9,8 +9,17 @@ export const render = interpolate;
 
 export const compile = function (template, viewmodel) {
     let compiledTemplate = build(template, viewmodel);
-    return render(compiledTemplate);
+    return render(compiledTemplate, viewmodel);
 };
+
+/* Used for browser registration */
+if (globalThis) {
+    globalThis.jet = {
+        build,
+        render,
+        compile
+    };
+}
 
 module.exports = {
     build,
