@@ -1,12 +1,12 @@
-import { partialRegex, getPropertyValue } from './templating';
+import { partialRegex, getPropertyValue, getInnerTemplate } from './templating';
 
 export function resolvePartials(template, object) {
-    return template.replace(partialRegex, (_, p1) => {
+    return template.replace(partialRegex, (match) => {
         let replacement = '';
 
-        p1 = p1.trim();
+        const property = getInnerTemplate(match);
 
-        let templateItem = getPropertyValue(p1, object);
+        let templateItem = getPropertyValue(property, object);
 
         if (templateItem) {
             replacement = templateItem;
