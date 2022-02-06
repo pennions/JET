@@ -418,6 +418,13 @@ const vm = {
 }
 ```
 
+Example template:
+
+```
+    {{# partials.username #}}
+    {{# partials.shoppingList #}}
+
+```
 Run:
 
 ```
