@@ -26,7 +26,7 @@
 JET stands for Just Easy Templating. I've created this library 
 because I couldn't find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
 and that isn't bulky with too many features. doT.js came very close, but it's syntax was
-bulky.
+bulky. Try it here in this repl: https://pennions.github.io/JET/
 
 # 2. Design principles:
 
