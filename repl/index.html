@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JET REPL - Pennions</title>
+
+        <style>
+            .repl-row {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .repl-row:not(:first-child) {
+                margin-top: 5rem;
+            }
+
+            .repl-container {
+                width: 40vw;
+                height: 40vh;
+            }
+
+            .repl-input {
+                width: 100%;
+                height: 100%;
+            }
+
+            label {
+                display: inline-block;
+                background-color: #0078d4;
+                color: white;
+                width: 100%;
+                padding: 0.5rem 0 0.5rem 0.5rem;
+                font-size: 1.2rem;
+            }
+        </style>
+        <script src="./jet.min.js"></script>
+        <script>
+            window.onload = () => {
+                setContents(
+                    'viewmodel',
+                    JSON.stringify({
+                        welcome_text: 'Welcome to JET templating!'
+                    })
+                );
+                setContents('template', '<h1>Hi! {{ welcome_text }}</h1>');
+                setContents(
+                    'build',
+                    jet.build('<h1>Hi! {{ welcome_text }}</h1>', {
+                        welcome_text: 'Welcome to JET templating!'
+                    })
+                );
+                setContents(
+                    'render',
+                    jet.compile('<h1>Hi! {{ welcome_text }}</h1>', {
+                        welcome_text: 'Welcome to JET templating!'
+                    })
+                );
+
+                // Check viewmodel
+                document
+                    .getElementById('viewmodel')
+                    .addEventListener('keyup', (event) => {
+                        let vm;
+                        let contents = '';
+                        try {
+                            vm = JSON.parse(event.target.value);
+
+                            const template =
+                                document.getElementById('template').value;
+
+                            if (!template) {
+                                contents = 'No template found';
+                            } else {
+                                contents = jet.compile(template, vm);
+                            }
+
+                            if (contents) {
+                                setContents('build', jet.build(template, vm));
+                            }
+                        } catch (e) {
+                            contents = 'Error parsing viewmodel';
+                        }
+                        setContents('render', contents);
+                    });
+
+                // Check template
+                document
+                    .getElementById('template')
+                    .addEventListener('keyup', (event) => {
+                        let vm;
+                        let contents = event;
+                        const template = event.target.value;
+
+                        try {
+                            const json =
+                                document.getElementById('viewmodel').value;
+                            vm = JSON.parse(json);
+
+                            if (!template) {
+                                contents = 'No template found';
+                            } else {
+                                contents = jet.compile(template, vm);
+                            }
+
+                            if (contents) {
+                                setContents('build', jet.build(template, vm));
+                            }
+                        } catch (e) {
+                            contents = 'Error parsing viewmodel';
+                        }
+
+                        setContents('render', contents);
+                    });
+
+                function setContents(id, contents) {
+                    document.getElementById(id).innerHTML = contents;
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <div class="repl-row">
+            <div class="repl-container">
+                <label>Viewmodel:</label>
+                <textarea id="viewmodel" class="repl-input"> </textarea>
+            </div>
+            <div class="repl-container">
+                <label>Template:</label>
+                <textarea id="template" class="repl-input">
+                    <h1>Hi! {{ welcome_text }}</h1>
+                </textarea>
+            </div>
+        </div>
+        <div class="repl-row">
+            <div class="repl-container">
+                <label>Build:</label>
+                <textarea id="build" class="repl-input"></textarea>
+            </div>
+            <div class="repl-container">
+                <label>Render:</label>
+                <textarea id="render" class="repl-input"></textarea>
+            </div>
+        </div>
+    </body>
+</html>
