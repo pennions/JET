@@ -7,13 +7,18 @@
 - [5. Features](#5-features)
     - [5.1. Interpolation](#51-interpolation)
         - [5.1.1. Interpolate nested properties](#511-interpolate-nested-properties)
+        - [5.1.2. Html encode interpolation](#512-html-encode-interpolation)
     - [5.2. Loops](#52-loops)
         - [5.2.1. Looping over nested properties](#521-looping-over-nested-properties)
     - [5.3. Conditionals](#53-conditionals)
         - [5.3.1. if x is y](#531-if-x-is-y)
         - [5.3.2. if x not y](#532-if-x-not-y)
         - [5.3.3. if x](#533-if-x)
-    - [6. Partials](#6-partials)
+    - [5.4. Partials](#54-partials)
+- [6. Functions](#6-functions)
+    - [6.1. build](#61-build)
+    - [6.2. render](#62-render)
+    - [6.3. compile](#63-compile)
 
 <!-- /TOC -->
 
@@ -40,7 +45,7 @@ Then it can be interpolated (fill in the properties) with the same viewmodel. So
 # 4. Viewmodel
 A viewmodel is a JSON object.
 
-Example used in this readme:
+Example:
 
 ```
 const vm = {
@@ -132,6 +137,45 @@ Output:
     <span>Bread</span>
 </div>
 ```
+
+### 5.1.2. Html encode interpolation
+Sometimes you want to html encode properties, like for a code example or for safety reasons.
+
+
+JSON model:
+
+```
+const vm = {
+   codeExample: '<div>Hello world!</div>'
+}
+```
+
+Example template:
+
+```
+<pre>
+    <code>
+        {{! codeExample }}
+    </code>
+</pre>
+```
+
+Run:
+
+```
+const renderedTemplate = jet.compile(template, vm);
+```
+
+Output:
+
+```
+<pre>
+    <code>
+        &lt;div&gt;Hello world!&lt;/div&gt;
+    </code>
+</pre>
+```
+
 
 ## 5.2. Loops
 
@@ -349,11 +393,11 @@ Output:
 <div>Jet</div>
 ```
 
-## 6. Partials
+## 5.4. Partials
 
 Partials are uncompiled or precompile templates as a string in your viewmodel.
 
-JSON model:
+JSON model: 
 
 ```
 const vm = {
@@ -390,3 +434,113 @@ Output:
     <li> Potato </li> 
 </ul>
 ```
+
+# 6. Functions
+
+There are three functions exposed in the library:
+
+* build
+* render
+* compile
+
+## 6.1. build
+
+Build is the pre-render step.
+It takes a template and a viewmodel an returns a new template with all the property paths resolved.
+
+
+JSON model: 
+
+```
+const vm = {
+    todoList: ['task1', 'task2', 'task3'],
+}
+```
+
+Example template:
+
+```
+<ul>
+    {{% for task in todoList
+        <li>
+            {{ task }}
+        </li>
+    %}}
+</ul>
+```
+
+Run:
+
+```
+const renderedTemplate = jet.build(template, vm);
+```
+
+Output:
+
+```
+<ul>
+    <li>
+        {{ todoList.0 }}
+    </li>
+    <li>
+        {{ todoList.1 }}
+    </li>
+    <li>
+        {{ todoList.2 }}
+    </li>
+</ul>
+```
+
+## 6.2. render
+This step will fill in the property values and return html.
+It takes a template from the build step and the viewmodel which was used.
+
+JSON model: 
+
+```
+const vm = {
+    todoList: ['task1', 'task2', 'task3'],
+}
+```
+
+Example template:
+
+```
+<ul>
+    <li>
+        {{ todoList.0 }}
+    </li>
+    <li>
+        {{ todoList.1 }}
+    </li>
+    <li>
+        {{ todoList.2 }}
+    </li>
+</ul>
+```
+
+Run:
+
+```
+const renderedTemplate = jet.build(template, vm);
+```
+
+Output:
+
+```
+<ul>
+    <li>
+        task1
+    </li>
+    <li>
+        task2
+    </li>
+    <li>
+        task3
+    </li>
+</ul>
+```
+
+## 6.3. compile
+
+Compile is a function that combines both build and render step.
