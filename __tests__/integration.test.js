@@ -1,4 +1,4 @@
-import { compile } from "../dist/jet";
+import { compile } from "../src/jet";
 import { cleanHtml } from "../src/functions/templating";
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
