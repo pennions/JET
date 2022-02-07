@@ -20,9 +20,10 @@ if (globalThis) {
         compile
     };
 }
-
-module.exports = {
-    build,
-    render,
-    compile
-};
+else {
+    module.exports = {
+        build,
+        render,
+        compile
+    };
+}

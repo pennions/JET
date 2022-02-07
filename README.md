@@ -1,34 +1,74 @@
 <!-- TOC -->
 
 - [1. JET](#1-jet)
-- [2. Design principles:](#2-design-principles)
-- [3. Architecture](#3-architecture)
-- [4. Viewmodel](#4-viewmodel)
-- [5. Features](#5-features)
-    - [5.1. Interpolation](#51-interpolation)
-        - [5.1.1. Interpolate nested properties](#511-interpolate-nested-properties)
-        - [5.1.2. Html encode interpolation](#512-html-encode-interpolation)
-    - [5.2. Loops](#52-loops)
-        - [5.2.1. Looping over nested properties](#521-looping-over-nested-properties)
-    - [5.3. Conditionals](#53-conditionals)
-        - [5.3.1. if x is y](#531-if-x-is-y)
-        - [5.3.2. if x not y](#532-if-x-not-y)
-        - [5.3.3. if x](#533-if-x)
-    - [5.4. Partials](#54-partials)
-- [6. Functions](#6-functions)
-    - [6.1. build](#61-build)
-    - [6.2. render](#62-render)
-    - [6.3. compile](#63-compile)
+- [2. Installation](#2-installation)
+    - [2.1. In the browser](#21-in-the-browser)
+    - [2.2. In NodeJS as ES6 module](#22-in-nodejs-as-es6-module)
+    - [2.3. In NodeJS as CommonJS module](#23-in-nodejs-as-commonjs-module)
+- [3. Design principles:](#3-design-principles)
+- [4. Architecture](#4-architecture)
+- [5. Viewmodel](#5-viewmodel)
+- [6. Features](#6-features)
+    - [6.1. Interpolation](#61-interpolation)
+        - [6.1.1. Interpolate nested properties](#611-interpolate-nested-properties)
+        - [6.1.2. Html encode interpolation](#612-html-encode-interpolation)
+    - [6.2. Loops](#62-loops)
+        - [6.2.1. Looping over nested properties](#621-looping-over-nested-properties)
+    - [6.3. Conditionals](#63-conditionals)
+        - [6.3.1. if x is y](#631-if-x-is-y)
+        - [6.3.2. if x not y](#632-if-x-not-y)
+        - [6.3.3. if x](#633-if-x)
+    - [6.4. Partials](#64-partials)
+- [7. Functions](#7-functions)
+    - [7.1. build](#71-build)
+    - [7.2. render](#72-render)
+    - [7.3. compile](#73-compile)
 
 <!-- /TOC -->
 
 # 1. JET
-JET stands for Just Easy Templating. I've created this library 
-because I couldn't find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
-and that isn't bulky with too many features. doT.js came very close, but it's syntax was
+JET stands for Just Easy Templating. I have created this library 
+because I could not find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
+and that is not bulky with too many features. doT.js came very close, but its syntax was
 bulky.
 
-# 2. Design principles:
+> If you intend to use this commercially, think about becoming a supporter, check *Sponsor this project* section on this GitHub page.
+
+&nbsp;
+# 2. Installation
+
+Download the latest zip from https://github.com/pennions/JET/releases
+
+Inside the zip file you will find both regular and minified versions.
+
+&nbsp;
+## 2.1. In the browser
+
+```
+<script src="js/jet.min.js"></script>
+```
+
+&nbsp;
+## 2.2. In NodeJS as ES6 module
+
+```
+import { compile } from 'js/jet.min.js';
+```
+
+Or
+
+```
+import { render, build } from 'js/jet.min.js';
+```
+
+&nbsp;
+## 2.3. In NodeJS as CommonJS module
+```
+const jet = require('js/jet.min.js');
+```
+
+&nbsp;
+# 3. Design principles:
 
 - Easy to use
 - Explicit over implicit (inspired from Python)
@@ -36,13 +76,15 @@ bulky.
 - Clean (write as little syntax as possible)
 - Logic free (Single responsibility)
 
-# 3. Architecture
-For designing this templating engine I've implemented the View and ViewModel part of MVVM (Model View ViewModel).
+&nbsp;
+# 4. Architecture
+For designing this templating engine I have implemented the View and ViewModel part of MVVM (Model View ViewModel).
 
 The view is build based on the viewmodel, which gives a pre-rendered state.
-Then it can be interpolated (fill in the properties) with the same viewmodel. So if your viewmodel structure never changes, you can re-use the same rendered template even if it's contents changes.
+Then it can be interpolated (fill in the properties) with the same viewmodel. So if your viewmodel structure never changes, you can re-use the same rendered template even if its contents changes.
 
-# 4. Viewmodel
+&nbsp;
+# 5. Viewmodel
 A viewmodel is a JSON object.
 
 Example:
@@ -61,20 +103,21 @@ const vm = {
     username: 'Jet'
 }
 ```
-
-# 5. Features
+&nbsp;
+# 6. Features
 
 - Interpolation
 - Loops
 - Conditionals
-    - This contradicts Logic Free, see explanation for the reason
+    - This contradicts Logic Free, see explanation for the reason.
 - Partials
 
-
-## 5.1. Interpolation
+&nbsp;
+## 6.1. Interpolation
 
 You can use the curlybrace (also known as mustachios) to place properties in a template.
 
+&nbsp;
 JSON model:
 
 ```
@@ -101,9 +144,9 @@ Output:
     <span>Jet</span>
 </div>
 ```
-
-### 5.1.1. Interpolate nested properties
-
+&nbsp;
+### 6.1.1. Interpolate nested properties
+&nbsp;
 JSON model:
 
 ```
@@ -137,11 +180,11 @@ Output:
     <span>Bread</span>
 </div>
 ```
-
-### 5.1.2. Html encode interpolation
+&nbsp;
+### 6.1.2. Html encode interpolation
 Sometimes you want to html encode properties, like for a code example or for safety reasons.
 
-
+&nbsp;
 JSON model:
 
 ```
@@ -176,11 +219,12 @@ Output:
 </pre>
 ```
 
-
-## 5.2. Loops
+&nbsp;
+## 6.2. Loops
 
 Loops are kind of the bread and butter of templating. Don't we all know the 'Todo' apps we build in a new language?
 
+&nbsp;
 JSON model:
 
 ```
@@ -204,6 +248,8 @@ Example template:
 
 > Supports both for ... in ... as wel as for ... of ...
 
+&nbsp;
+
 Run:
 
 ```
@@ -226,9 +272,8 @@ Output:
 </ul>
 ```
 &nbsp;
-### 5.2.1. Looping over nested properties
+### 6.2.1. Looping over nested properties
 &nbsp;
-
 JSON model:
 
 ```
@@ -273,18 +318,22 @@ Output:
     </li>
 </ul>
 ```
+&nbsp;
 
-## 5.3. Conditionals
+## 6.3. Conditionals
 Conditionals contradict the principle of 'Logic Free'. However having conditional renderings is a must for it to be easy, as 'being easy' is the top priority it has been implemented. However implementation is in a bare minimum. The following conditions can be checked.
 
 * if x is y
 * if x not y
 * if x
 
-### 5.3.1. if x is y
+&nbsp;
+### 6.3.1. if x is y
 This is implemented as a string comparison on both ways.
 
 > caveat: you need to start your inner template with either a { or a < else it will be used as comparison.
+
+&nbsp;
 
 JSON model:
 
@@ -318,9 +367,9 @@ Output:
 ```
 <div>The cake is not a lie!</div>
 ```
-
-### 5.3.2. if x not y
-
+&nbsp;
+### 6.3.2. if x not y
+&nbsp;
 JSON model:
 
 ```
@@ -353,13 +402,14 @@ Output:
 <div>Regular user</div>
 ```
 
-### 5.3.3. if x
+&nbsp;
+### 6.3.3. if x
 
 Checks if a property exists in the model and checks if it's value resolves to true with a terniary comparison.
 
 > **Important:** 0, false, '' and [ ] results are all counted as *false*
 
-
+&nbsp;
 JSON model:
 
 ```
@@ -392,11 +442,11 @@ Output:
 ```
 <div>Jet</div>
 ```
-
-## 5.4. Partials
+&nbsp;
+## 6.4. Partials
 
 Partials are uncompiled or precompile templates as a string in your viewmodel.
-
+&nbsp;
 JSON model: 
 
 ```
@@ -440,8 +490,8 @@ Output:
     <li> Potato </li> 
 </ul>
 ```
-
-# 6. Functions
+&nbsp;
+# 7. Functions
 
 There are three functions exposed in the library:
 
@@ -449,12 +499,12 @@ There are three functions exposed in the library:
 * render
 * compile
 
-## 6.1. build
+## 7.1. build
 
 Build is the pre-render step.
 It takes a template and a viewmodel an returns a new template with all the property paths resolved.
 
-
+&nbsp;
 JSON model: 
 
 ```
@@ -496,8 +546,8 @@ Output:
     </li>
 </ul>
 ```
-
-## 6.2. render
+&nbsp;
+## 7.2. render
 This step will fill in the property values and return html.
 It takes a template from the build step and the viewmodel which was used.
 
@@ -546,7 +596,7 @@ Output:
     </li>
 </ul>
 ```
-
-## 6.3. compile
+&nbsp;
+## 7.3. compile
 
 Compile is a function that combines both build and render step.

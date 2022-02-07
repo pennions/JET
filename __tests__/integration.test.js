@@ -1,4 +1,4 @@
-import { compile } from "../src/jet";
+import { compile } from "../dist/jet";
 import { cleanHtml } from "../src/functions/templating";
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
@@ -10,7 +10,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             item: ["Item1", "Item2", "Item3"],
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(foo.compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('correctly renders an array with objects', () => {
