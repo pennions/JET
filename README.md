@@ -27,7 +27,7 @@
 <!-- /TOC -->
 
 # 1. JET
-JET stands for Just Easy Templating. I have created this library 
+JET stands for Jelmer's Easy Templating. I have created this library 
 because I could not find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
 and that is not bulky with too many features. doT.js came very close, but its syntax was
 bulky. Try it here in this repl: https://pennions.github.io/JET/
