@@ -80,8 +80,9 @@ const jet = require('js/jet.min.js');
 # 4. Architecture
 For designing this templating engine I have implemented the View and ViewModel part of MVVM (Model View ViewModel).
 
-The view is build based on the viewmodel, which gives a pre-rendered state.
-Then it can be interpolated (fill in the properties) with the same viewmodel. So if your viewmodel structure never changes, you can re-use the same rendered template even if its contents changes.
+The view is created with help of the viewmodel, which gives a pre-rendered state.
+Then it can be interpolated (fill in the properties) with the same viewmodel. So as long as your JSON model has the keys that are referenced in this pre-rendered state, you don't need to recompile.
+
 
 &nbsp;
 # 5. Viewmodel
@@ -222,7 +223,7 @@ Output:
 &nbsp;
 ## 6.2. Loops
 
-Loops are kind of the bread and butter of templating. Don't we all know the 'Todo' apps we build in a new language?
+To demonstrate this principle let us take a look at a very familiar example of a Todo app.
 
 &nbsp;
 JSON model:
@@ -321,7 +322,7 @@ Output:
 &nbsp;
 
 ## 6.3. Conditionals
-Conditionals contradict the principle of 'Logic Free'. However having conditional renderings is a must for it to be easy, as 'being easy' is the top priority it has been implemented. However implementation is in a bare minimum. The following conditions can be checked.
+Conditionals contradict the principle of 'Logic Free'. However having conditional renderings is a must for it to be easy, as 'being easy' is the top priority it has been implemented. Therefor the implementation is kept to a bare minimum. The following conditions can be checked:
 
 * if x is y
 * if x not y
@@ -329,9 +330,13 @@ Conditionals contradict the principle of 'Logic Free'. However having conditiona
 
 &nbsp;
 ### 6.3.1. if x is y
-This is implemented as a string comparison on both ways.
+This is implemented as a string comparison resolved as:
 
-> caveat: you need to start your inner template with either a { or a < else it will be used as comparison.
+```
+x.toString().toLowerCase() === y.toString().toLowerCase()
+```
+
+> caveat: you need to start your inner template with either a { or a < else it will be included in the comparison.
 
 &nbsp;
 
@@ -405,7 +410,11 @@ Output:
 &nbsp;
 ### 6.3.3. if x
 
-Checks if a property exists in the model and checks if it's value resolves to true with a terniary comparison.
+Checks if a property exists in the model and checks if its value resolves to true with a terniary comparison like:
+
+```
+x ? template : ''
+```
 
 > **Important:** 0, false, '' and [ ] results are all counted as *false*
 
@@ -445,7 +454,7 @@ Output:
 &nbsp;
 ## 6.4. Partials
 
-Partials are uncompiled or precompile templates as a string in your viewmodel.
+Partials are uncompiled or precompiled templates as a string in your viewmodel.
 &nbsp;
 JSON model: 
 
@@ -502,7 +511,7 @@ There are three functions exposed in the library:
 ## 7.1. build
 
 Build is the pre-render step.
-It takes a template and a viewmodel an returns a new template with all the property paths resolved.
+It takes a template and a viewmodel and returns a new template with all the property paths resolved.
 
 &nbsp;
 JSON model: 
@@ -599,4 +608,4 @@ Output:
 &nbsp;
 ## 7.3. compile
 
-Compile is a function that combines both build and render step.
+Compile is a function that combines build and render steps.
