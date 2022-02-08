@@ -1,3 +1,7 @@
+body {
+    background-color: #fafafa;
+}
+
 .repl-row {
     margin-top: 1rem;
     display: flex;
@@ -29,6 +33,7 @@ label {
 
 textarea {
     border: 0.5px solid lightgray;
+    padding-right:0.25rem;
 }
 
 i {
