@@ -537,7 +537,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.build(template, vm);
+const buildTemplate = jet.build(template, vm);
 ```
 
 Output:
@@ -587,7 +587,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.build(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:

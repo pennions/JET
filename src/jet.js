@@ -3,18 +3,17 @@
  */
 import { resolveTemplate } from './functions/resolveTemplate';
 import { interpolate } from './functions/interpolation';
+import { init, update, compile } from './functions/framework';
 
 export const build = resolveTemplate;
 export const render = interpolate;
 
-export const compile = function (template, viewmodel) {
-    let compiledTemplate = build(template, viewmodel);
-    return render(compiledTemplate, viewmodel);
-};
 
 /* Used for browser registration */
 if (globalThis) {
     globalThis.jet = {
+        init,
+        update,
         build,
         render,
         compile
@@ -22,6 +21,8 @@ if (globalThis) {
 }
 else {
     module.exports = {
+        init,
+        update,
         build,
         render,
         compile
