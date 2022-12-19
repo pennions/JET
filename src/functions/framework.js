@@ -46,11 +46,31 @@ function setValue(object, propertyTrail, newValue) {
 }
 
 function rerender() {
-    for (const htmlElement of window._jetElements[window._updatedProperty]) {
-        document.getElementById(htmlElement.id).innerHTML = compile(htmlElement.template, window._jetViewmodel);
+    const elementsToUpdate = window._jetElements[window._updatedProperty];
+    for (const htmlElement of elementsToUpdate) {
+        const elementToUpdate = document.getElementById(htmlElement.id);
+
+        if (elementToUpdate !== null) {
+            const isPartial = htmlElement.template.includes('{{#');
+
+            if (isPartial) {
+                elementToUpdate.innerHTML = resolveTemplate(htmlElement.template, window._jetViewmodel);
+                init(htmlElement.id);
+            }
+            else {
+                elementToUpdate.innerHTML = compile(htmlElement.template, window._jetViewmodel);
+            }
+        }
+        else {
+            /** cleanup previous template and rerender */
+            const index = elementsToUpdate.findIndex(el => el.id === htmlElement.id);
+            if (index > -1) {
+                window._jetElements[window._updatedProperty].splice(index, 1);
+            }
+            rerender();
+        }
     }
 }
-
 
 /** Elements found */
 window._jetElements = {};
@@ -66,15 +86,18 @@ window._jetViewmodel = {};
  * @param {object} viewmodel the viewmodel to use to render
  */
 export const init = function (elementId, viewmodel) {
-    window._jetViewmodel = createPennionsModel(Object.assign({}, viewmodel), rerender);
+    /** Needs to be initialized only once. but the function can be used to render partials. */
+    if (viewmodel) {
+        window._jetViewmodel = createPennionsModel(Object.assign({}, viewmodel), rerender);
+    }
+
     const { children } = document.getElementById(elementId);
 
     for (const child of children) {
-        if (child.innerText.includes('{')) {
+        if (child.nodeName.toLowerCase() !== 'script' && child.innerText.includes('{')) {
             const indentifier = uuidv4();
             const template = child.innerHTML;
             const propertyName = getPropertyName(template);
-
             if (propertyName) {
                 if (window._jetElements[propertyName]) {
                     window._jetElements[propertyName].push({ id: indentifier, template });
@@ -83,7 +106,17 @@ export const init = function (elementId, viewmodel) {
                     window._jetElements[propertyName] = [{ id: indentifier, template }];
                 }
                 child.id = indentifier;
-                child.innerHTML = compile(template, window._jetViewmodel);
+
+                const isPartial = template.includes('{{#');
+
+                if (isPartial) {
+                    /** We want the partials to trigger rerender on their prop change as well */
+                    child.innerHTML = resolveTemplate(template, window._jetViewmodel);
+                    init(indentifier);
+                }
+                else {
+                    child.innerHTML = compile(template, window._jetViewmodel);
+                }
             }
         }
     }

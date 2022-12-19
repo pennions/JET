@@ -17,6 +17,14 @@
 
         <p>{{ a.b.c }}</p>
 
+        <jet>{{# hello_world #}}</jet>
+
+        <jet>
+            {{~ if a.b.c is 1337
+            <div>True!</div>
+            ~}}
+        </jet>
+
         <script>
             const vm = {
                 shoppingList: {
@@ -26,7 +34,9 @@
                     b: {
                         c: 1337
                     }
-                }
+                },
+                message: 'Hello world!',
+                hello_world: `<div>{{ message }}</div>`
             };
             const pennionsVM = jet.init('app', vm);
         </script>
