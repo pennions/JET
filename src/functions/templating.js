@@ -134,6 +134,9 @@ export function getPropertyName(template) {
             property = regexParts[1];
             break;
         }
+        default: {
+            property = roughTemplate
+        }
     }
 
     if (property.includes('.')) {
