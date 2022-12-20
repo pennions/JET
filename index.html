@@ -17,13 +17,13 @@
 
         <p>{{ a.b.c }}</p>
 
-        <jet>{{# hello_world #}}</jet>
+        <div>{{# hello_world #}}</div>
 
-        <jet>
-            {{~ if a.b.c is 1337
+        <div>
+            {{message}} {{~ if a.b.c is 1337
             <div>True!</div>
             ~}}
-        </jet>
+        </div>
 
         <script>
             const vm = {

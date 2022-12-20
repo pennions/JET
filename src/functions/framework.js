@@ -47,6 +47,8 @@ function setValue(object, propertyTrail, newValue) {
 
 function rerender() {
     const elementsToUpdate = window._jetElements[window._updatedProperty];
+
+    const elementsToRemove = [];
     for (const htmlElement of elementsToUpdate) {
         const elementToUpdate = document.getElementById(htmlElement.id);
 
@@ -62,12 +64,17 @@ function rerender() {
             }
         }
         else {
-            /** cleanup previous template and rerender */
-            const index = elementsToUpdate.findIndex(el => el.id === htmlElement.id);
+            elementsToRemove.push(htmlElement.id);
+        }
+    }
+
+    if (elementsToRemove.length) {
+        /** cleanup previous template */
+        for (const elementId of elementsToRemove) {
+            const index = elementsToUpdate.findIndex(el => el.id === elementId);
             if (index > -1) {
                 window._jetElements[window._updatedProperty].splice(index, 1);
             }
-            rerender();
         }
     }
 }
@@ -91,7 +98,9 @@ export const init = function (elementId, viewmodel) {
         window._jetViewmodel = createPennionsModel(Object.assign({}, viewmodel), rerender);
     }
 
-    const { children } = document.getElementById(elementId);
+    const rootElement = document.getElementById(elementId);
+
+    const { children } = rootElement;
 
     for (const child of children) {
         if (child.nodeName.toLowerCase() !== 'script' && child.innerText.includes('{')) {
@@ -138,3 +147,9 @@ export const compile = function (template, viewmodel) {
     let compiledTemplate = resolveTemplate(template, viewmodel);
     return interpolate(compiledTemplate, viewmodel);
 };
+
+
+// todo: loop over textnodes, if textnodes and partial, mark it in the elements array and then filter out the part of the html of the partial. 
+// then replace that node.
+// https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_replacechild
+
