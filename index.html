@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>JET Runtime Test</title>
-        <script src="./dist/jet.js"></script>
+        <script type="module" src="development.js"></script>
     </head>
     <body id="app">
         <h1>Shopping list</h1>
@@ -26,19 +26,7 @@
         </div>
 
         <script>
-            const vm = {
-                shoppingList: {
-                    groceryStore: ['Carrot', 'Melon', 'Potato']
-                },
-                a: {
-                    b: {
-                        c: 1337
-                    }
-                },
-                message: 'Hello world!',
-                hello_world: `<div>{{ message }}</div>`
-            };
-            const pennionsVM = jet.init('app', vm);
+          
         </script>
     </body>
 </html>
