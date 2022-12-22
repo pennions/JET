@@ -1,4 +1,8 @@
 import { init } from './src/functions/framework';
+import { update } from './src/functions/framework';
+
+window.jet = {};
+window.jet.update = update;
 
 const vm = {
     shoppingList: {
@@ -14,3 +18,6 @@ const vm = {
 };
 
 const pennionsVM = init('app', vm);
+
+
+update('a.b.c', 42);
