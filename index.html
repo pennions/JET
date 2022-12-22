@@ -8,6 +8,13 @@
         <script type="module" src="development.js"></script>
     </head>
     <body id="app">
+        <button onclick="jet.update('a.b.c', 1337)">
+            Update a.b.c to 1337
+        </button>
+        <button onclick="jet.update('message', 'Hello Jet Framework!')">
+            Update message to Hello Jet Framework!
+        </button>
+
         <h1>Shopping list</h1>
         <ul>
             {{% for item in shoppingList.groceryStore
@@ -15,7 +22,7 @@
             %}}
         </ul>
 
-        <p>{{ a.b.c }}</p>
+        <p>{{ a.b.c }} - {{ message }}</p>
 
         <div>{{# hello_world #}}</div>
 

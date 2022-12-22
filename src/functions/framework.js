@@ -1,6 +1,6 @@
 import { resolveTemplate } from './resolveTemplate';
 import { interpolate } from './interpolation';
-import { getPropertyName } from './templating';
+import { getPropertyName, getPropertyNames } from './templating';
 
 function createPennionsModel(object, onUpdated) {
     var handler = {
@@ -199,13 +199,17 @@ function _renderTemplate(node) {
  */
 function _retrieveAndStorePropertyData(template) {
     const identifier = uuidv4();
-    const propertyName = getPropertyName(template);
-    if (propertyName) {
-        if (window._jetElements[propertyName]) {
-            window._jetElements[propertyName].push({ id: identifier, template });
-        }
-        else {
-            window._jetElements[propertyName] = [{ id: identifier, template }];
+    const propertyNames = getPropertyNames(template);
+    if (propertyNames.length) {
+
+        for (const propertyName of propertyNames) {
+
+            if (window._jetElements[propertyName]) {
+                window._jetElements[propertyName].push({ id: identifier, template });
+            }
+            else {
+                window._jetElements[propertyName] = [{ id: identifier, template }];
+            }
         }
         return identifier;
     }
