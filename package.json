@@ -1,6 +1,6 @@
 {
   "name": "@pennions/jet",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A semantic templating engine inspired by doT.js",
   "main": "./src/jet.js",
   "scripts": {
