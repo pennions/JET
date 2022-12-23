@@ -66,15 +66,7 @@ function rerender() {
         const elementToUpdate = document.querySelector(`[data-jet-${htmlElement.id}]`);
 
         if (elementToUpdate !== null) {
-            const isPartial = htmlElement.template.includes('{{#');
-
-            if (isPartial) {
-                elementToUpdate.innerHTML = resolveTemplate(htmlElement.template, window._jetViewmodel);
-                init(htmlElement.id);
-            }
-            else {
-                elementToUpdate.innerHTML = compile(htmlElement.template, window._jetViewmodel);
-            }
+            _renderTemplate(elementToUpdate, htmlElement.id, htmlElement.template);
         }
         else {
             elementsToRemove.push(htmlElement.id);
@@ -167,19 +159,16 @@ function _recursiveInitialization(children) {
 
         if (child.nodeName.toLowerCase() !== 'script' && child.innerText.includes('{')) {
             const template = child.innerHTML;
-            _renderTemplate(child, template);
+            const identifier = _retrieveAndStorePropertyData(template);
+            _renderTemplate(child, identifier, template);
         }
-
     }
 }
 
-function _renderTemplate(node) {
-    const template = node.innerHTML;
-    const identifier = _retrieveAndStorePropertyData(template);
+function _renderTemplate(node, identifier, template) {
 
     if (identifier) {
         node.setAttribute(`data-jet-${identifier}`, '');
-
         const isPartial = template.includes('{{#');
 
         if (isPartial) {
