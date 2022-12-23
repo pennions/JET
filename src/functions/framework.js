@@ -1,6 +1,6 @@
 import { resolveTemplate } from './resolveTemplate';
 import { interpolate } from './interpolation';
-import { getPropertyName, getPropertyNames } from './templating';
+import { getPropertyNames } from './templating';
 
 function createPennionsModel(object, onUpdated) {
     var handler = {
