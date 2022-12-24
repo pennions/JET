@@ -1,4 +1,8 @@
-import { compile } from "../src/jet";
+/**
+ * @jest-environment jsdom
+ */
+
+import { compile } from "../src/functions/framework";
 import { cleanHtml } from "../src/functions/templating";
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
