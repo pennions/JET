@@ -23,14 +23,15 @@
     - [7.1. build](#71-build)
     - [7.2. render](#72-render)
     - [7.3. compile](#73-compile)
+- [8. JET Framework](#8-jet-framework)
 
 <!-- /TOC -->
 
 # 1. JET
 JET stands for Jelmer's Easy Templating. I have created this library 
-because I could not find a good library that is very small (jet.min.css is ~2kb! pre-gzip)
+because I could not find a good library that is very small (jet.min.js is ~5kb! pre-gzip)
 and that is not bulky with too many features. doT.js came very close, but its syntax was
-bulky. Try it here in this repl: https://pennions.github.io/JET/
+bulky. Try JET here in this repl: https://pennions.github.io/JET/
 
 > If you intend to use this commercially, think about becoming a supporter, check *Sponsor this project* section on this GitHub page.
 
@@ -537,7 +538,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.build(template, vm);
+const buildTemplate = jet.build(template, vm);
 ```
 
 Output:
@@ -587,7 +588,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.build(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -609,3 +610,52 @@ Output:
 ## 7.3. compile
 
 Compile is a function that combines build and render steps.
+
+# 8. JET Framework
+
+Included in jet is a reactive framework which you can use to not only build and interpolate your template, but also update the it on-the-fly in the browser!
+
+You have only need two commands.
+
+One for the initialization. It takes two arguments: 
+```
+jet.init('app', vm);
+```
+
+*'app'* is an element id, in which you did all your templating and vm is a viewmodel.
+
+> example viewmodel:
+```
+const vm = {
+    shoppingList: {
+        groceryStore: ['Carrot', 'Melon', 'Potato']
+    },
+    a: {
+        b: {
+            c: 1337
+        }
+    },
+    message: 'Hello world!',
+    hello_world: '<div>{{ message }}</div>'
+};
+```
+
+After you initialized the framework, you can use the following command to update the template with a new value:
+
+```
+jet.update('a.b.c', 42);
+``` 
+
+*'a.b.c* is the complete path in the vm, so in this example, *c* is nested under *b* which is nested under *a*.
+
+Another valid example would be:
+
+```
+jet.update('hello_world', '<h1>{{ message }}</h1>')
+```
+
+It works just like you would access a property from a JSON object.
+
+In the above example you are setting a new template. Which will now be rendered. This is useful for having router functionality. 
+
+You could write your own router to fetch a new template on demand and update your viewmodel. All the properties inside will also become reactive!

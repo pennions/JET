@@ -99,3 +99,76 @@ export function getInnerTemplate(template) {
     // template length minus the three template tokens, e.g. ~}} and a space before
     return template.substring(4, template.length - 4);
 }
+
+export function getPropertyNames(template, properties = []) {
+    const templateStringEnd = template.indexOf('}}');
+
+    if (templateStringEnd === -1) {
+        return properties;
+    }
+
+    const propertyName = getPropertyName(template.substring(0, templateStringEnd + 2));
+
+    /** Check if we got a part of a loop, template or if statement, if so ignore */
+    const logicSymbols = ['%', '#', '~'];
+    const lastCharacter = propertyName[propertyName.length - 1];
+    if (!logicSymbols.includes(lastCharacter)) {
+        properties.push(propertyName);
+    }
+    return getPropertyNames(template.substring(templateStringEnd + 2), properties);
+}
+
+export function getPropertyName(template) {
+    /** roughly get the first bit */
+    const templateStartIndex = template.indexOf('{{');
+    const templateEndIndex = template.indexOf('}}');
+    const roughTemplate = template.substring(templateStartIndex + 2, templateEndIndex);
+
+    const token = roughTemplate[0];
+
+    let property = '';
+
+    switch (token) {
+        /** template is just a simple interpolation, we are done. */
+        case ' ': {
+            property = roughTemplate;
+            break;
+        }
+        case '!': {
+            property = roughTemplate.substring(1);
+            break;
+        }
+        case '%': {
+            const regexParts = roughTemplate.match(loopListPropertyRegex);
+            property = regexParts.pop();
+            break;
+        }
+        case '#': {
+            property = roughTemplate.replace(/#/g, '');
+            break;
+        }
+        case '~': {
+            const regexParts = roughTemplate.match(conditionalPropertyRegex);
+            property = regexParts[1];
+            break;
+        }
+        default: {
+            property = roughTemplate;
+        }
+    }
+
+    if (property.includes('.')) {
+        const propertyParts = property.split('.');
+        property = propertyParts.pop();
+
+        /** check if it is an array index */
+        if (!isNaN(property)) {
+            do {
+                property = propertyParts.pop();
+            }
+            while (!isNaN(property));
+        }
+    }
+
+    return property.replace(/\s+/g, '');
+}

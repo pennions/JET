@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JET Runtime Test</title>
+        <script type="module" src="development.js"></script>
+    </head>
+    <body id="app">
+        <button onclick="jet.update('a.b.c', 1337)">
+            Update a.b.c to 1337
+        </button>
+        <button onclick="jet.update('message', 'Hello Jet Framework!')">
+            Update message to Hello Jet Framework!
+        </button>
+
+        <h1>Shopping list</h1>
+        <ul>
+            {{% for item in shoppingList.groceryStore
+            <li>{{ item }}</li>
+            %}}
+        </ul>
+
+        <p>{{ a.b.c }} - {{ message }}</p>
+
+        <div>{{# hello_world #}}</div>
+
+        <div>
+            {{message}} {{~ if a.b.c is 1337
+            <div>True!</div>
+            ~}}
+        </div>
+
+        <h1>Nested properties</h1>
+        <div>
+            {{ message }}
+            <!-- this is no longer responsive -->
+            <div>{{ a.b.c }}</div>
+        </div>
+
+        {{# hello_world #}}
+    </body>
+</html>

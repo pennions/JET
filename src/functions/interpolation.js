@@ -18,7 +18,7 @@ export function interpolate(template, object) {
             replacement = templateItem;
         }
 
-        replacement = replacement.trim();
+        replacement = Array.isArray(replacement) ? replacement.join(', ') : replacement.toString().trim();
 
         return encode ? escapeHtml(replacement) : replacement;
     });
