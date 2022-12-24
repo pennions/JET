@@ -38,15 +38,30 @@ bulky. Try JET here in this repl: https://pennions.github.io/JET/
 &nbsp;
 # 2. Installation
 
+You can install it using a package manager:
+
+```yarn add @pennions/jet``` 
+
+```npm install @pennions/jet```
+
+Or manually:
+
 Download the latest zip from https://github.com/pennions/JET/releases
 
 Inside the zip file you will find both regular and minified versions.
+
 
 &nbsp;
 ## 2.1. In the browser
 
 ```
 <script src="js/jet.min.js"></script>
+```
+
+or from a CDN like unpkg:
+
+```
+<script src="https://unpkg.com/browse/@pennions/jet/dist/jet.min.js"></script>
 ```
 
 &nbsp;
