@@ -9,10 +9,10 @@ window._jetGuidStore = [];
 window._jetElements = {};
 
 /** The full path of the updated property that has been updated */
-window._updatedProperty = '';
+window._jetUpdatedProperty = '';
 
 /** the specific (nested) property name that is mentioned in the template */
-window._updatedTemplateProperty = '';
+window._jetUpdatedTemplateProperty = '';
 
 /** global scoped viewmodel */
 window._jetViewmodel = {};
@@ -48,10 +48,10 @@ function _createPennionsModel(object) {
 function _reactOnChange() {
 
     /** Only trigger the ones that need to be triggered */
-    const watchersForThisProperty = window._jetWatchers.filter(jl => jl.property === window._updatedProperty);
+    const watchersForThisProperty = window._jetWatchers.filter(jl => jl.property === window._jetUpdatedProperty);
 
     for (const watcher of watchersForThisProperty) {
-        watcher.onUpdate(get(window._updatedProperty));
+        watcher.onUpdate(get(window._jetUpdatedProperty));
     }
     _rerender();
 }
@@ -99,7 +99,7 @@ function _getValue(object, propertyTrail) {
 }
 
 function _rerender() {
-    const elementsToUpdate = window._jetElements[window._updatedTemplateProperty];
+    const elementsToUpdate = window._jetElements[window._jetUpdatedTemplateProperty];
 
     if (!elementsToUpdate) return;
 
@@ -120,7 +120,7 @@ function _rerender() {
         for (const elementId of elementsToRemove) {
             const index = elementsToUpdate.findIndex(el => el.id === elementId);
             if (index > -1) {
-                window._jetElements[window._updatedTemplateProperty].splice(index, 1);
+                window._jetElements[window._jetUpdatedTemplateProperty].splice(index, 1);
             }
         }
     }
@@ -248,10 +248,10 @@ export const init = function (elementId, viewmodel, onrendered) {
  * @param {*} newValue the complete new value to set. like 2, or [ 1, 2, 3 ] if it is an array or { a: 1, b: 2} if it is an object
  */
 export const update = function (property, newValue) {
-    window._updatedProperty = property;
+    window._jetUpdatedProperty = property;
 
     const propertyTrail = property.split('.');
-    window._updatedTemplateProperty = propertyTrail[propertyTrail.length - 1];
+    window._jetUpdatedTemplateProperty = propertyTrail[propertyTrail.length - 1];
 
     _setValue(window._jetViewmodel, propertyTrail, newValue);
 };
