@@ -9,8 +9,8 @@
     "minify": "uglifyjs --compress --mangle --output dist/jet.min.js dist/jet.js",
     "test": "jest --collectCoverage",
     "lint": "npx prettier -w src/**",
-    "deploy": "npm run build | npm run minify",
-    "publish": "npm run deploy | npm publish --access public"
+    "deploy": "npm run build && npm run minify",
+    "publish": "npm run deploy && npm publish --access public"
   },
   "author": "Jelmer Veen <https://github.com/pennions>",
   "license": "MIT",
