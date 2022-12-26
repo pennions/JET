@@ -7,7 +7,10 @@ export const cleanConditionalRegex =
 export const conditionalStatementRegex = / (is|not) ([\s\S]+?)(\n|<|{)/im;
 export const loopPropertyRegex = /for([\s\S]+?)(of|in)/im;
 export const loopListPropertyRegex = /(of|in)([\s\S]+?)(?=<|{)/im;
+export const viewmodelWrapperPropertyRegex = /(from)([\s\S]+?)(?=<|{)/im;
+export const cleanViewmodelWrapperPropertyRegex = /(from)([\s\S]+?)(\n|<|{)/im;
 export const hasLoopRegex = /\{\{%([\s\S]+?)%\}\}/im;
+export const hasWrapperRegex = /\{\{\$([\s\S]+?)\$\}\}/im;
 export const cleanLoopRegex = / ?for([\s\S]+?)(of|in)([\s\S]+?)(?=<|{)/im;
 export const partialRegex = /\{\{#([\s\S]+?)\}\}/gim;
 export const trailRegex = /\{\{(.+)\}\}/gm;

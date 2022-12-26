@@ -4,13 +4,16 @@ import {
     hasConditionalRegex,
     conditionalPropertyRegex,
     cleanConditionalRegex,
+    cleanViewmodelWrapperPropertyRegex,
     conditionalStatementRegex,
     loopPropertyRegex,
     loopListPropertyRegex,
     hasLoopRegex,
     cleanLoopRegex,
     partialRegex,
-    trailRegex
+    trailRegex,
+    hasWrapperRegex,
+    viewmodelWrapperPropertyRegex
 } from '../regexes/templateRegexes.js';
 
 export {
@@ -18,6 +21,7 @@ export {
     cleanHtmlRegex,
     hasConditionalRegex,
     conditionalPropertyRegex,
+    cleanViewmodelWrapperPropertyRegex,
     cleanConditionalRegex,
     conditionalStatementRegex,
     loopPropertyRegex,
@@ -25,7 +29,9 @@ export {
     hasLoopRegex,
     cleanLoopRegex,
     partialRegex,
-    trailRegex
+    trailRegex,
+    hasWrapperRegex,
+    viewmodelWrapperPropertyRegex
 };
 
 /**
@@ -110,7 +116,7 @@ export function getPropertyNames(template, properties = []) {
     const propertyName = getPropertyName(template.substring(0, templateStringEnd + 2));
 
     /** Check if we got a part of a loop, template or if statement, if so ignore */
-    const logicSymbols = ['%', '#', '~'];
+    const logicSymbols = ['%', '#', '~', '$'];
     const lastCharacter = propertyName[propertyName.length - 1];
     if (!logicSymbols.includes(lastCharacter)) {
         properties.push(propertyName);
