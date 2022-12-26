@@ -10,7 +10,7 @@
     "test": "jest --collectCoverage",
     "lint": "npx prettier -w src/**",
     "deploy": "npm run build | npm run minify",
-    "publish": "npm publish --access public"
+    "publish": "npm run deploy | npm publish --access public"
   },
   "author": "Jelmer Veen <https://github.com/pennions>",
   "license": "MIT",
