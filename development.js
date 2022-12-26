@@ -1,8 +1,16 @@
-import { init } from './src/functions/framework';
-import { update } from './src/functions/framework';
+import { init, watch } from './src/functions/framework';
+import { update, get } from './src/functions/framework';
 
 window.jet = {};
 window.jet.update = update;
+window.jet.get = get;
+window.jet.watch = watch;
+
+const x2 = async function () {
+    const lazy = await import('./importMe.js');
+    lazy.test();
+
+};
 
 const vm = {
     shoppingList: {
@@ -14,10 +22,20 @@ const vm = {
         }
     },
     message: 'Hello world!',
-    hello_world: `<div>{{ message }}</div>`
+    hello_world: `<div>
+    {{ message }}
+    </div>`
 };
 
-const pennionsVM = init('app', vm);
+init('app', vm,);
 
+const x = watch('a.b.c', (newValue) => {
+    console.log(newValue, ' From: ' + x);
+});
+
+const y = watch('message', (newValue) => {
+    console.log(newValue, ' From: ' + y);
+    x2();
+});
 
 update('a.b.c', 42);

@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { compile } from "../src/functions/framework";
 import { cleanHtml } from "../src/functions/templating";
 
