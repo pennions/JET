@@ -1,6 +1,6 @@
 {
   "name": "@pennions/jet",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A semantic templating engine inspired by doT.js",
   "main": "./src/jet.js",
   "scripts": {
@@ -18,10 +18,11 @@
     "@babel/plugin-transform-modules-commonjs": "^7.16.8",
     "@rollup/plugin-commonjs": "^21.0.1",
     "jest": "^27.4.7",
+    "jest-environment-jsdom": "^27.4.7",
     "prettier": "2.5.1",
     "rollup": "^2.67.0",
     "uglify-js": "^3.15.0",
     "vite": "^4.0.0",
-    "jest-environment-jsdom": "^27.4.7"
+    "@types/jest": "^29.2.4"
   }
 }

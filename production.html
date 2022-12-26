@@ -8,6 +8,10 @@
         <script src="dist/jet.js"></script>
     </head>
     <body id="app">
+        <button onclick="jet.update('message', 'Hello Jet Framework!')">
+            Update message to Hello Jet Framework!
+        </button>
+
         <h1>Shopping list</h1>
         <ul>
             {{% for item in shoppingList.groceryStore
@@ -28,7 +32,6 @@
         <h1>Nested properties</h1>
         <div>
             {{ message }}
-            <!-- this is no longer responsive -->
             <div>{{ a.b.c }}</div>
         </div>
 
@@ -49,6 +52,13 @@
             };
 
             const pennionsVM = jet.init('app', vm);
+
+            const x2 = async function () {
+                const lazy = await import('./importMe.js');
+                lazy.test();
+            };
+
+            jet.watch('message', x2);
         </script>
     </body>
 </html>
