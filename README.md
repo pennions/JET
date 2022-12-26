@@ -24,12 +24,14 @@
     - [7.2. render](#72-render)
     - [7.3. compile](#73-compile)
 - [8. JET Framework](#8-jet-framework)
+    - [Get value](#get-value)
+    - [Watchers](#watchers)
 
 <!-- /TOC -->
 
 # 1. JET
 JET stands for Jelmer's Easy Templating. I have created this library 
-because I could not find a good library that is very small (jet.min.js is ~5kb! pre-gzip)
+because I could not find a good library that is very small (jet.min.js is ~6kb! pre-gzip)
 and that is not bulky with too many features. doT.js came very close, but its syntax was
 bulky. Try JET here in this repl: https://pennions.github.io/JET/
 
@@ -49,7 +51,6 @@ Or manually:
 Download the latest zip from https://github.com/pennions/JET/releases
 
 Inside the zip file you will find both regular and minified versions.
-
 
 &nbsp;
 ## 2.1. In the browser
@@ -632,10 +633,12 @@ Included in jet is a reactive framework which you can use to not only build and 
 
 You have only need two commands.
 
-One for the initialization. It takes two arguments: 
+One for the initialization. It takes two required arguments: 
 ```
 jet.init('app', vm);
 ```
+
+You can also pass a function as a third argument. This will be called after everything has been initialized.
 
 *'app'* is an element id, in which you did all your templating and vm is a viewmodel.
 
@@ -674,3 +677,36 @@ It works just like you would access a property from a JSON object.
 In the above example you are setting a new template. Which will now be rendered. This is useful for having router functionality. 
 
 You could write your own router to fetch a new template on demand and update your viewmodel. All the properties inside will also become reactive!
+
+## Get value
+
+You can use the following command to retrieve the current value of a property inside the reactive viewmodel:
+
+```
+jet.get('a.b.c');
+```
+
+Where *a.b.c* is the complete property path.
+
+## Watchers
+
+You can do a function when a value changes, it will pass the new value as an argument:
+
+```jet.watch('a.b.c', myFunction(newValue) => console.log(newValue));```
+
+**N.B.** if the value is nested and you update it like ```'a.b.c'``` it will only trigger when you watch it with ```'a.b.c'``` parameter and *not* for instance if you do ```jet.update('a.b', { c: 'newString' } );```
+
+## Adding event listeners
+
+
+Shorthand for ```document.getElementById(id).addEventListener(event, eventFunction, options?)```:
+ 
+```
+jet.addEvent(id, event, eventFunction, options?);
+```
+
+Shorthand for ```document.getElementById(id).removeEventListener(event, eventFunction, options?)```:
+ 
+```
+jet.removeEvent(id, event, eventFunction, options?);
+```

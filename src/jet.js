@@ -1,9 +1,9 @@
 /**
- * A simple templating engine, created by Jelmer Veen
+ * A simple templating engine, created by Jelmer Veen 2022
  */
 import { resolveTemplate } from './functions/resolveTemplate';
 import { interpolate } from './functions/interpolation';
-import { init, update, compile } from './functions/framework';
+import { init, update, get, compile, addEvent, removeEvent, watch, removeWatch } from './functions/framework';
 
 export const build = resolveTemplate;
 export const render = interpolate;
@@ -13,7 +13,12 @@ export const render = interpolate;
 if (globalThis) {
     globalThis.jet = {
         init,
+        get,
         update,
+        addEvent,
+        removeEvent,
+        watch,
+        removeWatch,
         build,
         render,
         compile
@@ -21,8 +26,6 @@ if (globalThis) {
 }
 else {
     module.exports = {
-        init,
-        update,
         build,
         render,
         compile
