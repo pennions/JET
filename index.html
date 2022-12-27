@@ -38,6 +38,19 @@
             <div>{{ a.b.c }}</div>
         </div>
 
+        <section>
+            <div>
+                <p>
+                    <span> {{ super_nested }} </span>
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h1>Nested message section</h1>
+            <div>{{$ from nested {{# hello_world #}} $}}</div>
+        </section>
+
         {{# hello_world #}}
     </body>
 </html>

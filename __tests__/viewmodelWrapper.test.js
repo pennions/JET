@@ -123,4 +123,14 @@ $}}`;
         expect(result).toEqual(resultTemplate);
     });
 
+
+    test('it can compile inlined wrapper', () => {
+       const template = '{{$ from nested {{ message }} $}}'
+       const resultTemplate = '{{ nested.message }}'
+
+       const result = resolveTemplateWrapper(template);
+
+       expect(result).toEqual(resultTemplate);
+    })
+
 });

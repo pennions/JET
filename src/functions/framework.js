@@ -130,8 +130,10 @@ function _recursiveInitialization(children) {
 
     for (const child of children) {
 
+        const hasWrapper = child.innerText.includes('{{$');
+
         /** So if we have child elements and it is NOT a loop and NOT a conditional we go ahead */
-        if (child.children.length > 0 && !child.innerText.includes('{{%') && !child.innerText.includes('{{~')) {
+        if (child.children.length > 0 && !child.innerText.includes('{{%') && !child.innerText.includes('{{~') && !hasWrapper) {
             _recursiveInitialization(child.children);
         }
 
@@ -148,8 +150,9 @@ function _renderTemplate(node, identifier, template) {
     if (identifier) {
         node.setAttribute(`data-jet-${identifier}`, '');
         const isPartial = template.includes('{{#');
+        const isWrapped = template.includes('{{$');
 
-        if (isPartial) {
+        if (isPartial || isWrapped) {
             /** We want the partials to trigger rerender on their prop change as well */
             node.innerHTML = resolveTemplate(template, window._jetViewmodel);
             init(identifier);
@@ -200,42 +203,42 @@ export const init = function (elementId, viewmodel, onrendered) {
     /** The first initialization is actually an ID */
     if (rootElement === null) {
         rootElement = document.getElementById(elementId);
-    }
 
-    /** Check for partials that have no root element */
-    const { childNodes } = rootElement;
 
-    const parser = new DOMParser();
+        /** Check for partials that have no root element */
+        const { childNodes } = rootElement;
 
-    childNodes.forEach((child) => {
-        if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
+        const parser = new DOMParser();
 
-            const cleanedTemplate = child.textContent.trim();
-            const identifier = _retrieveAndStorePropertyData(cleanedTemplate);
-            const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
-            const html = parser.parseFromString(innerTemplate, 'text/html');
+        childNodes.forEach((child) => {
+            if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
 
-            const partialElement = html.body.firstChild;
-            partialElement.setAttribute(`data-jet-${identifier}`, '');
+                const cleanedTemplate = child.textContent.trim();
+                const identifier = _retrieveAndStorePropertyData(cleanedTemplate);
+                const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
+                const html = parser.parseFromString(innerTemplate, 'text/html');
 
-            /** if we just pulled out the container and there is no element inside
-             * treat is as text and add that to a span for reactiveness
-             */
-            if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
-                const spanEl = document.createElement('span');
-                spanEl.innerText = partialElement.innerText;
-                partialElement.innerText = '';
-                partialElement.appendChild(spanEl);
+                const partialElement = html.body.firstChild;
+                partialElement.setAttribute(`data-jet-${identifier}`, '');
+
+                /** if we just pulled out the container and there is no element inside
+                 * treat is as text and add that to a span for reactiveness
+                 */
+                if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
+                    const spanEl = document.createElement('span');
+                    spanEl.innerText = partialElement.innerText;
+                    partialElement.innerText = '';
+                    partialElement.appendChild(spanEl);
+                }
+
+                child.parentNode.replaceChild(partialElement, child);
             }
+        });
+    }
+    /** now compile everything */
+    const { children } = rootElement;
 
-            child.parentNode.replaceChild(partialElement, child);
-        }
-
-        /** now compile everything */
-        const { children } = rootElement;
-
-        _recursiveInitialization(children);
-    });
+    _recursiveInitialization(children);
 
     if (onrendered) {
         onrendered();

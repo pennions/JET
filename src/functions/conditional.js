@@ -23,12 +23,12 @@ export function resolveConditional(template, object) {
 
         truthyCheck = statementCheck === 'is';
         falsyCheck = statementCheck === 'not';
-        comparisonValue = conditionalStatement[2].trim().toLowerCase();
+        comparisonValue = conditionalStatement[2].toString().trim().toLowerCase();
     }
 
     let propToValidate = conditionalPropertyRegex.exec(template);
 
-    propToValidate = propToValidate[1].trim();
+    propToValidate = propToValidate[1].toString().trim();
     let propertyValue = getPropertyValue(propToValidate, object);
 
     if (propertyValue) {

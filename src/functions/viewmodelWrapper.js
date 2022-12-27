@@ -20,13 +20,13 @@ export function resolveTemplateWrapper(template) {
     const wrapperTemplate = getTemplate('$', template);
     const nestedProp = viewmodelWrapperPropertyRegex.exec(wrapperTemplate)[2].trim();
 
-    const replacedLoops = extractLogic('%', nestedProp, template);
+    const replacedLoops = extractLogic('%', nestedProp, wrapperTemplate);
     const replacedConditionals = extractLogic('~', nestedProp, replacedLoops.template);
     const replacedPartials = extractLogic('#', nestedProp, replacedConditionals.template);
-    const cleanedTemplate = getInnerTemplate(replacedPartials.template).replace(cleanViewmodelWrapperPropertyRegex, '');
+    const x = getInnerTemplate(replacedPartials.template);
+    const cleanedTemplate = getInnerTemplate(replacedPartials.template).replace(cleanViewmodelWrapperPropertyRegex, '').trim();
 
     let newTemplate = cleanedTemplate;
-    // this does not work with loop parts
     const properties = cleanedTemplate.match(propertyRegex);
 
     if (properties) {

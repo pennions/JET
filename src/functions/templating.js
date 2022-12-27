@@ -13,7 +13,8 @@ import {
     partialRegex,
     trailRegex,
     hasWrapperRegex,
-    viewmodelWrapperPropertyRegex
+    viewmodelWrapperPropertyRegex,
+    cleanTemplateRegex
 } from '../regexes/templateRegexes.js';
 
 export {
@@ -107,7 +108,7 @@ export function getInnerTemplate(template) {
 }
 
 export function getPropertyNames(template, properties = []) {
-    const templateStringEnd = template.indexOf('}}');
+    const templateStringEnd = template.lastIndexOf('}}');
 
     if (templateStringEnd === -1) {
         return properties;
@@ -156,6 +157,11 @@ export function getPropertyName(template) {
         case '~': {
             const regexParts = roughTemplate.match(conditionalPropertyRegex);
             property = regexParts[1];
+            break;
+        }
+        case '$': {
+            const regexParts = roughTemplate.match(viewmodelWrapperPropertyRegex);
+            property = regexParts[2];
             break;
         }
         default: {

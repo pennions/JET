@@ -21,6 +21,10 @@ const vm = {
             c: 1337
         }
     },
+    super_nested: 'Yeah super nested!',
+    nested: {
+        message: 'Hello from nested property!'
+    },
     message: 'Hello world!',
     hello_world: `<div>
     {{ message }}
