@@ -132,7 +132,7 @@ function _recursiveInitialization(children) {
 
         const hasWrapper = child.innerText.includes('{{$');
 
-        /** So if we have child elements and it is NOT a loop and NOT a conditional we go ahead */
+        /** So if we have child elements and it is NOT a loop and NOT a conditional and NOT wrapped we go ahead */
         if (child.children.length > 0 && !child.innerText.includes('{{%') && !child.innerText.includes('{{~') && !hasWrapper) {
             _recursiveInitialization(child.children);
         }

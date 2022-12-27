@@ -13,7 +13,7 @@ import {
     hasConditionalRegex,
     cleanViewmodelWrapperPropertyRegex
 } from './templating';
-
+// templating issue found:
 export function resolveTemplateWrapper(template) {
     if (!hasWrapperRegex.test(template)) return template;
 
@@ -23,7 +23,6 @@ export function resolveTemplateWrapper(template) {
     const replacedLoops = extractLogic('%', nestedProp, wrapperTemplate);
     const replacedConditionals = extractLogic('~', nestedProp, replacedLoops.template);
     const replacedPartials = extractLogic('#', nestedProp, replacedConditionals.template);
-    const x = getInnerTemplate(replacedPartials.template);
     const cleanedTemplate = getInnerTemplate(replacedPartials.template).replace(cleanViewmodelWrapperPropertyRegex, '').trim();
 
     let newTemplate = cleanedTemplate;
@@ -34,13 +33,13 @@ export function resolveTemplateWrapper(template) {
         for (const property of properties) {
             const templateProp = getPropertyName(property).trim();
 
-            const replacement = replacePropWithTrail(
+            newTemplate = replacePropWithTrail(
                 newTemplate,
                 property,
                 `{{ ${nestedProp}.${templateProp} }}`
             );
-            newTemplate = template.replace(wrapperTemplate, replacement);
         }
+       newTemplate = template.replace(wrapperTemplate, newTemplate);
     }
 
     /** Return the extracted logic. */
@@ -48,7 +47,6 @@ export function resolveTemplateWrapper(template) {
     for (const logic of replacedLogic) {
         newTemplate = newTemplate.replace(logic.id, logic.template);
     }
-
     return newTemplate;
 }
 
