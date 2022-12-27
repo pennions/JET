@@ -48,7 +48,12 @@
 
         <section>
             <h1>Nested message section</h1>
-            <div>{{$ from nested {{# hello_world #}} $}}</div>
+            <div>
+                {{$ from nested {{# hello_world #}}
+
+                <h5>{{message}}</h5>
+                $}}
+            </div>
         </section>
 
         {{# hello_world #}}
