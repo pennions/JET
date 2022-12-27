@@ -7,6 +7,7 @@
     - [2.3. In NodeJS as CommonJS module](#23-in-nodejs-as-commonjs-module)
 - [3. Design principles:](#3-design-principles)
 - [4. Architecture](#4-architecture)
+    - [4.1 Compilation order](#41-compilation-order)
 - [5. Viewmodel](#5-viewmodel)
 - [6. Features](#6-features)
     - [6.1. Interpolation](#61-interpolation)
@@ -19,6 +20,7 @@
         - [6.3.2. if x not y](#632-if-x-not-y)
         - [6.3.3. if x](#633-if-x)
     - [6.4. Partials](#64-partials)
+    - [6.5 Viewmodel wrappers](#65-viewmodel-wrappers)
 - [7. Functions](#7-functions)
     - [7.1. build](#71-build)
     - [7.2. render](#72-render)
@@ -95,11 +97,17 @@ const jet = require('js/jet.min.js');
 
 &nbsp;
 # 4. Architecture
-For designing this templating engine I have implemented the View and ViewModel part of MVVM (Model View ViewModel).
+For designing this templating engine I have implemented the View and Viewmodel part of MVVM (Model View ViewModel).
 
 The view is created with help of the viewmodel, which gives a pre-rendered state.
 Then it can be interpolated (fill in the properties) with the same viewmodel. So as long as your JSON model has the keys that are referenced in this pre-rendered state, you don't need to recompile.
 
+## 4.1 Compilation order
+
+1. Partials 
+2. Viewmodel wrappers
+3. Loops
+4. Conditionals
 
 &nbsp;
 # 5. Viewmodel
@@ -516,6 +524,52 @@ Output:
     <li> Potato </li> 
 </ul>
 ```
+
+## 6.5 Viewmodel wrappers
+
+If you want to create reusable partials for example, you need a way to prefix your properties in a template. A viewmodel wrapper provides this.
+
+**Syntax**
+
+```
+{{$ from path.to.property
+
+$}}
+```
+
+For example you have a partial with the following template:
+
+```
+<h1>{{ title }}</h1>
+```
+
+And you have a viewmodel with this structure: 
+
+```
+const vm = {
+    book: {
+        title: 'Epic book'
+    },
+    title_partial: '<h1>{{ title }}</h1>'
+}
+```
+
+If you would add the partial directly, title will be undefined.
+
+Unless you wrap it like:
+
+```
+{{$ from book
+    {{# title_partial #}}
+$}}
+```
+
+Now it will resolve to:
+
+```
+<h1>{{ book.title }}</h1>
+```
+
 &nbsp;
 # 7. Functions
 
