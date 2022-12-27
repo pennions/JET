@@ -31,7 +31,7 @@ const vm = {
     </div>`
 };
 
-init('app', vm,);
+init('app', vm);
 
 const x = watch('a.b.c', (newValue) => {
     console.log(newValue, ' From: ' + x);

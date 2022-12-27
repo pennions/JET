@@ -107,22 +107,23 @@ export function getInnerTemplate(template) {
     return template.substring(4, template.length - 4);
 }
 
-export function getPropertyNames(template, properties = []) {
-    const templateStringEnd = template.lastIndexOf('}}');
+// needs to be smarter
+export function getPropertyNames(template) {
+    const properties = [];
 
-    if (templateStringEnd === -1) {
-        return properties;
+    const jetTemplates = template.match(propertyRegex);
+
+    for (const jetTemplate of jetTemplates) {
+        const propertyName = getPropertyName(jetTemplate);
+
+        /** Check if we got a part of a loop, template or if statement, if so ignore */
+        const logicSymbols = ['%', '#', '~', '$'];
+        const lastCharacter = propertyName[propertyName.length - 1];
+        if (!logicSymbols.includes(lastCharacter)) {
+            properties.push(propertyName);
+        }
     }
-
-    const propertyName = getPropertyName(template.substring(0, templateStringEnd + 2));
-
-    /** Check if we got a part of a loop, template or if statement, if so ignore */
-    const logicSymbols = ['%', '#', '~', '$'];
-    const lastCharacter = propertyName[propertyName.length - 1];
-    if (!logicSymbols.includes(lastCharacter)) {
-        properties.push(propertyName);
-    }
-    return getPropertyNames(template.substring(templateStringEnd + 2), properties);
+    return properties;
 }
 
 export function getPropertyName(template) {

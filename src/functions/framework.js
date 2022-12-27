@@ -139,7 +139,7 @@ function _recursiveInitialization(children) {
 
         if (child.nodeName.toLowerCase() !== 'script' && child.innerText.includes('{')) {
             const template = child.innerHTML;
-            const identifier = _retrieveAndStorePropertyData(template);
+            const identifier = _findAndStorePropertyData(template);
             _renderTemplate(child, identifier, template);
         }
     }
@@ -167,7 +167,7 @@ function _renderTemplate(node, identifier, template) {
  * @param {string} template an innerHTML or text string with JET syntax
  * @returns an uuidv4
  */
-function _retrieveAndStorePropertyData(template) {
+function _findAndStorePropertyData(template) {
     const identifier = _uuidv4();
     const propertyNames = getPropertyNames(template);
     if (propertyNames.length) {
@@ -214,7 +214,7 @@ export const init = function (elementId, viewmodel, onrendered) {
             if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
 
                 const cleanedTemplate = child.textContent.trim();
-                const identifier = _retrieveAndStorePropertyData(cleanedTemplate);
+                const identifier = _findAndStorePropertyData(cleanedTemplate);
                 const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
                 const html = parser.parseFromString(innerTemplate, 'text/html');
 
