@@ -1,5 +1,5 @@
 import { resolveTemplate } from "../src/functions/resolveTemplate";
-import { cleanHtml, cleanTemplate } from "../src/functions/templating";
+import { cleanHtml } from "../src/functions/templating";
 
 const template = `
 <main>
