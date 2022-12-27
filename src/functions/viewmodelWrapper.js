@@ -13,7 +13,7 @@ import {
     hasConditionalRegex,
     cleanViewmodelWrapperPropertyRegex
 } from './templating';
-// templating issue found:
+
 export function resolveTemplateWrapper(template) {
     if (!hasWrapperRegex.test(template)) return template;
 
