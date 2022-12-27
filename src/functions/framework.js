@@ -8,6 +8,8 @@ window._jetGuidStore = [];
 /** Elements found */
 window._jetElements = {};
 
+window._jetReverseElementLookup = {};
+
 /** The full path of the updated property that has been updated */
 window._jetUpdatedProperty = '';
 
@@ -108,7 +110,7 @@ function _rerender() {
         const elementToUpdate = document.querySelector(`[data-jet-${htmlElement.id}]`);
 
         if (elementToUpdate !== null) {
-            _renderTemplate(elementToUpdate, htmlElement.id, htmlElement.template);
+            _renderTemplate(elementToUpdate, htmlElement.id, htmlElement.template, true);
         }
         else {
             elementsToRemove.push(htmlElement.id);
@@ -121,6 +123,7 @@ function _rerender() {
             const index = elementsToUpdate.findIndex(el => el.id === elementId);
             if (index > -1) {
                 window._jetElements[window._jetUpdatedTemplateProperty].splice(index, 1);
+                delete window._jetReverseElementLookup[elementId];
             }
         }
     }
@@ -145,10 +148,11 @@ function _recursiveInitialization(children) {
     }
 }
 
-function _renderTemplate(node, identifier, template) {
+function _renderTemplate(node, identifier, template, rerender) {
+    const jetIdentifierPrefix = 'data-jet-';
 
     if (identifier) {
-        node.setAttribute(`data-jet-${identifier}`, '');
+        node.setAttribute(`${jetIdentifierPrefix}${identifier}`, '');
         const isPartial = template.includes('{{#');
         const isWrapped = template.includes('{{$');
 
@@ -159,6 +163,18 @@ function _renderTemplate(node, identifier, template) {
         }
         else {
             node.innerHTML = compile(template, window._jetViewmodel);
+        }
+
+        /** templates can get tainted during recursive compilation. reverse that */
+        if (rerender && node.children.length) {
+            for (const child of node.children) {
+                const attributes = child.getAttributeNames().filter(name => name.includes(jetIdentifierPrefix));
+                for (const attribute of attributes) {
+                    const childId = attribute.replace(jetIdentifierPrefix, '');
+                    const childElement = window._jetReverseElementLookup[childId];
+                    _renderTemplate(child, childId, childElement.template);
+                }
+            }
         }
     }
 }
@@ -180,6 +196,8 @@ function _findAndStorePropertyData(template) {
             else {
                 window._jetElements[propertyName] = [{ id: identifier, template }];
             }
+            window._jetReverseElementLookup[identifier] = { propertyName, template };
+
         }
         return identifier;
     }

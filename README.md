@@ -30,7 +30,6 @@
     - [8.1. Get value](#81-get-value)
     - [8.2. Watchers](#82-watchers)
     - [8.3. Adding event listeners](#83-adding-event-listeners)
-- [9. Caveats](#9-caveats)
 
 <!-- /TOC -->
 
@@ -764,25 +763,3 @@ Shorthand for ```document.getElementById(id).removeEventListener(event, eventFun
 ```
 jet.removeEvent(id, event, eventFunction, options?);
 ```
-&nbsp;
-
-# 9. Caveats
-The following will parse, but when updating ```message```, ```a.b.c``` wil revert to its original value.
-Because ```a.b.c``` will be resolved first, and then the template has been altered already when saved.
-
-```
-<h1>Nested properties</h1>
-<div>
-    {{ message }}
-    <div>{{ a.b.c }}</div>
-</div>
-```
-
-To avoid this use an HTML element like a ```span```:
-
-```
-<h1>Nested properties</h1>
-<div>
-    <span>{{ message }}</span>
-    <div>{{ a.b.c }}</div>
-</div
