@@ -32,7 +32,7 @@ export function resolveConditional(template, object) {
     let propertyValue = getPropertyValue(propToValidate, object);
 
     if (propertyValue) {
-        propertyValue = propertyValue.toString().toLowerCase();
+        propertyValue = propertyValue.toString().trim().toLowerCase();
     }
 
     const conditionalTemplate = getTemplate('~', template);
@@ -52,7 +52,10 @@ export function resolveConditional(template, object) {
     }
 
     if (!conditionalStatement) {
-        replacement = propertyValue ? cleanedTemplate : '';
+        if (propertyValue === 'false') replacement = '';
+        else {
+            replacement = propertyValue ? cleanedTemplate : '';
+        }
     }
 
     const newTemplate = template.replace(conditionalTemplate, replacement);
