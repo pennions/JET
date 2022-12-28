@@ -21,13 +21,17 @@ const vm = {
             c: 1337
         }
     },
+    super_nested: 'Yeah super nested!',
+    nested: {
+        message: 'Hello from nested property!'
+    },
     message: 'Hello world!',
     hello_world: `<div>
     {{ message }}
     </div>`
 };
 
-init('app', vm,);
+init('app', vm);
 
 const x = watch('a.b.c', (newValue) => {
     console.log(newValue, ' From: ' + x);

@@ -23,16 +23,16 @@ export function resolveConditional(template, object) {
 
         truthyCheck = statementCheck === 'is';
         falsyCheck = statementCheck === 'not';
-        comparisonValue = conditionalStatement[2].trim().toLowerCase();
+        comparisonValue = conditionalStatement[2].toString().trim().toLowerCase();
     }
 
     let propToValidate = conditionalPropertyRegex.exec(template);
 
-    propToValidate = propToValidate[1].trim();
+    propToValidate = propToValidate[1].toString().trim();
     let propertyValue = getPropertyValue(propToValidate, object);
 
     if (propertyValue) {
-        propertyValue = propertyValue.toString().toLowerCase();
+        propertyValue = propertyValue.toString().trim().toLowerCase();
     }
 
     const conditionalTemplate = getTemplate('~', template);
@@ -52,7 +52,10 @@ export function resolveConditional(template, object) {
     }
 
     if (!conditionalStatement) {
-        replacement = propertyValue ? cleanedTemplate : '';
+        if (propertyValue === 'false') replacement = '';
+        else {
+            replacement = propertyValue ? cleanedTemplate : '';
+        }
     }
 
     const newTemplate = template.replace(conditionalTemplate, replacement);

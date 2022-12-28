@@ -7,6 +7,7 @@
     - [2.3. In NodeJS as CommonJS module](#23-in-nodejs-as-commonjs-module)
 - [3. Design principles:](#3-design-principles)
 - [4. Architecture](#4-architecture)
+    - [4.1. Compilation order](#41-compilation-order)
 - [5. Viewmodel](#5-viewmodel)
 - [6. Features](#6-features)
     - [6.1. Interpolation](#61-interpolation)
@@ -19,19 +20,22 @@
         - [6.3.2. if x not y](#632-if-x-not-y)
         - [6.3.3. if x](#633-if-x)
     - [6.4. Partials](#64-partials)
+    - [6.5. Viewmodel wrappers](#65-viewmodel-wrappers)
+        - [6.5.1 Syntax](#651-syntax)
 - [7. Functions](#7-functions)
     - [7.1. build](#71-build)
     - [7.2. render](#72-render)
     - [7.3. compile](#73-compile)
 - [8. JET Framework](#8-jet-framework)
-    - [Get value](#get-value)
-    - [Watchers](#watchers)
+    - [8.1. Get value](#81-get-value)
+    - [8.2. Watchers](#82-watchers)
+    - [8.3. Adding event listeners](#83-adding-event-listeners)
 
 <!-- /TOC -->
 
 # 1. JET
 JET stands for Jelmer's Easy Templating. I have created this library 
-because I could not find a good library that is very small (jet.min.js is ~6kb! pre-gzip)
+because I could not find a good library that is very small (jet.min.js is ~8kb! pre-gzip)
 and that is not bulky with too many features. doT.js came very close, but its syntax was
 bulky. Try JET here in this repl: https://pennions.github.io/JET/
 
@@ -95,11 +99,17 @@ const jet = require('js/jet.min.js');
 
 &nbsp;
 # 4. Architecture
-For designing this templating engine I have implemented the View and ViewModel part of MVVM (Model View ViewModel).
+For designing this templating engine I have implemented the View and Viewmodel part of MVVM (Model View ViewModel).
 
 The view is created with help of the viewmodel, which gives a pre-rendered state.
 Then it can be interpolated (fill in the properties) with the same viewmodel. So as long as your JSON model has the keys that are referenced in this pre-rendered state, you don't need to recompile.
 
+## 4.1. Compilation order
+
+1. Partials 
+2. Viewmodel wrappers
+3. Loops
+4. Conditionals
 
 &nbsp;
 # 5. Viewmodel
@@ -516,6 +526,52 @@ Output:
     <li> Potato </li> 
 </ul>
 ```
+
+## 6.5. Viewmodel wrappers
+
+If you want to create reusable partials for example, you need a way to prefix your properties in a template. A viewmodel wrapper provides this.
+
+### 6.5.1 Syntax
+
+```
+{{$ from path.to.property
+
+$}}
+```
+
+For example you have a partial with the following template:
+
+```
+<h1>{{ title }}</h1>
+```
+
+And you have a viewmodel with this structure: 
+
+```
+const vm = {
+    book: {
+        title: 'Epic book'
+    },
+    title_partial: '<h1>{{ title }}</h1>'
+}
+```
+
+If you would add the partial directly, title will be undefined.
+
+Unless you wrap it like:
+
+```
+{{$ from book
+    {{# title_partial #}}
+$}}
+```
+
+Now it will resolve to:
+
+```
+<h1>{{ book.title }}</h1>
+```
+
 &nbsp;
 # 7. Functions
 
@@ -624,11 +680,9 @@ Output:
 ```
 &nbsp;
 ## 7.3. compile
-
 Compile is a function that combines build and render steps.
-
+&nbsp;
 # 8. JET Framework
-
 Included in jet is a reactive framework which you can use to not only build and interpolate your template, but also update the it on-the-fly in the browser!
 
 You have only need two commands.
@@ -678,8 +732,8 @@ In the above example you are setting a new template. Which will now be rendered.
 
 You could write your own router to fetch a new template on demand and update your viewmodel. All the properties inside will also become reactive!
 
-## Get value
 
+## 8.1. Get value
 You can use the following command to retrieve the current value of a property inside the reactive viewmodel:
 
 ```
@@ -688,17 +742,16 @@ jet.get('a.b.c');
 
 Where *a.b.c* is the complete property path.
 
-## Watchers
-
+## 8.2. Watchers
 You can do a function when a value changes, it will pass the new value as an argument:
 
-```jet.watch('a.b.c', myFunction(newValue) => console.log(newValue));```
+```
+jet.watch('a.b.c', myFunction(newValue) => console.log(newValue));
+```
 
 **N.B.** if the value is nested and you update it like ```'a.b.c'``` it will only trigger when you watch it with ```'a.b.c'``` parameter and *not* for instance if you do ```jet.update('a.b', { c: 'newString' } );```
 
-## Adding event listeners
-
-
+## 8.3. Adding event listeners
 Shorthand for ```document.getElementById(id).addEventListener(event, eventFunction, options?)```:
  
 ```

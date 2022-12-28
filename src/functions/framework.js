@@ -8,6 +8,8 @@ window._jetGuidStore = [];
 /** Elements found */
 window._jetElements = {};
 
+window._jetReverseElementLookup = {};
+
 /** The full path of the updated property that has been updated */
 window._jetUpdatedProperty = '';
 
@@ -108,7 +110,7 @@ function _rerender() {
         const elementToUpdate = document.querySelector(`[data-jet-${htmlElement.id}]`);
 
         if (elementToUpdate !== null) {
-            _renderTemplate(elementToUpdate, htmlElement.id, htmlElement.template);
+            _renderTemplate(elementToUpdate, htmlElement.id, htmlElement.template, true);
         }
         else {
             elementsToRemove.push(htmlElement.id);
@@ -121,6 +123,7 @@ function _rerender() {
             const index = elementsToUpdate.findIndex(el => el.id === elementId);
             if (index > -1) {
                 window._jetElements[window._jetUpdatedTemplateProperty].splice(index, 1);
+                delete window._jetReverseElementLookup[elementId];
             }
         }
     }
@@ -130,32 +133,48 @@ function _recursiveInitialization(children) {
 
     for (const child of children) {
 
-        /** So if we have child elements and it is NOT a loop and NOT a conditional we go ahead */
-        if (child.children.length > 0 && !child.innerText.includes('{{%') && !child.innerText.includes('{{~')) {
+        const hasWrapper = child.innerText.includes('{{$');
+
+        /** So if we have child elements and it is NOT a loop and NOT a conditional and NOT wrapped we go ahead */
+        if (child.children.length > 0 && !child.innerText.includes('{{%') && !child.innerText.includes('{{~') && !hasWrapper) {
             _recursiveInitialization(child.children);
         }
 
         if (child.nodeName.toLowerCase() !== 'script' && child.innerText.includes('{')) {
             const template = child.innerHTML;
-            const identifier = _retrieveAndStorePropertyData(template);
+            const identifier = _findAndStorePropertyData(template);
             _renderTemplate(child, identifier, template);
         }
     }
 }
 
-function _renderTemplate(node, identifier, template) {
+function _renderTemplate(node, identifier, template, rerender) {
+    const jetIdentifierPrefix = 'data-jet-';
 
     if (identifier) {
-        node.setAttribute(`data-jet-${identifier}`, '');
+        node.setAttribute(`${jetIdentifierPrefix}${identifier}`, '');
         const isPartial = template.includes('{{#');
+        const isWrapped = template.includes('{{$');
 
-        if (isPartial) {
+        if (isPartial || isWrapped) {
             /** We want the partials to trigger rerender on their prop change as well */
             node.innerHTML = resolveTemplate(template, window._jetViewmodel);
             init(identifier);
         }
         else {
             node.innerHTML = compile(template, window._jetViewmodel);
+        }
+
+        /** templates can get tainted during recursive compilation. reverse that */
+        if (rerender && node.children.length) {
+            for (const child of node.children) {
+                const attributes = child.getAttributeNames().filter(name => name.includes(jetIdentifierPrefix));
+                for (const attribute of attributes) {
+                    const childId = attribute.replace(jetIdentifierPrefix, '');
+                    const childElement = window._jetReverseElementLookup[childId];
+                    _renderTemplate(child, childId, childElement.template);
+                }
+            }
         }
     }
 }
@@ -164,7 +183,7 @@ function _renderTemplate(node, identifier, template) {
  * @param {string} template an innerHTML or text string with JET syntax
  * @returns an uuidv4
  */
-function _retrieveAndStorePropertyData(template) {
+function _findAndStorePropertyData(template) {
     const identifier = _uuidv4();
     const propertyNames = getPropertyNames(template);
     if (propertyNames.length) {
@@ -177,6 +196,8 @@ function _retrieveAndStorePropertyData(template) {
             else {
                 window._jetElements[propertyName] = [{ id: identifier, template }];
             }
+            window._jetReverseElementLookup[identifier] = { propertyName, template };
+
         }
         return identifier;
     }
@@ -200,42 +221,42 @@ export const init = function (elementId, viewmodel, onrendered) {
     /** The first initialization is actually an ID */
     if (rootElement === null) {
         rootElement = document.getElementById(elementId);
-    }
 
-    /** Check for partials that have no root element */
-    const { childNodes } = rootElement;
 
-    const parser = new DOMParser();
+        /** Check for partials that have no root element */
+        const { childNodes } = rootElement;
 
-    childNodes.forEach((child) => {
-        if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
+        const parser = new DOMParser();
 
-            const cleanedTemplate = child.textContent.trim();
-            const identifier = _retrieveAndStorePropertyData(cleanedTemplate);
-            const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
-            const html = parser.parseFromString(innerTemplate, 'text/html');
+        childNodes.forEach((child) => {
+            if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
 
-            const partialElement = html.body.firstChild;
-            partialElement.setAttribute(`data-jet-${identifier}`, '');
+                const cleanedTemplate = child.textContent.trim();
+                const identifier = _findAndStorePropertyData(cleanedTemplate);
+                const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
+                const html = parser.parseFromString(innerTemplate, 'text/html');
 
-            /** if we just pulled out the container and there is no element inside
-             * treat is as text and add that to a span for reactiveness
-             */
-            if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
-                const spanEl = document.createElement('span');
-                spanEl.innerText = partialElement.innerText;
-                partialElement.innerText = '';
-                partialElement.appendChild(spanEl);
+                const partialElement = html.body.firstChild;
+                partialElement.setAttribute(`data-jet-${identifier}`, '');
+
+                /** if we just pulled out the container and there is no element inside
+                 * treat is as text and add that to a span for reactiveness
+                 */
+                if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
+                    const spanEl = document.createElement('span');
+                    spanEl.innerText = partialElement.innerText;
+                    partialElement.innerText = '';
+                    partialElement.appendChild(spanEl);
+                }
+
+                child.parentNode.replaceChild(partialElement, child);
             }
+        });
+    }
+    /** now compile everything */
+    const { children } = rootElement;
 
-            child.parentNode.replaceChild(partialElement, child);
-        }
-
-        /** now compile everything */
-        const { children } = rootElement;
-
-        _recursiveInitialization(children);
-    });
+    _recursiveInitialization(children);
 
     if (onrendered) {
         onrendered();

@@ -4,13 +4,17 @@ import {
     hasConditionalRegex,
     conditionalPropertyRegex,
     cleanConditionalRegex,
+    cleanViewmodelWrapperPropertyRegex,
     conditionalStatementRegex,
     loopPropertyRegex,
     loopListPropertyRegex,
     hasLoopRegex,
     cleanLoopRegex,
     partialRegex,
-    trailRegex
+    trailRegex,
+    hasWrapperRegex,
+    viewmodelWrapperPropertyRegex,
+    cleanTemplateRegex
 } from '../regexes/templateRegexes.js';
 
 export {
@@ -18,6 +22,7 @@ export {
     cleanHtmlRegex,
     hasConditionalRegex,
     conditionalPropertyRegex,
+    cleanViewmodelWrapperPropertyRegex,
     cleanConditionalRegex,
     conditionalStatementRegex,
     loopPropertyRegex,
@@ -25,7 +30,9 @@ export {
     hasLoopRegex,
     cleanLoopRegex,
     partialRegex,
-    trailRegex
+    trailRegex,
+    hasWrapperRegex,
+    viewmodelWrapperPropertyRegex
 };
 
 /**
@@ -99,23 +106,22 @@ export function getInnerTemplate(template) {
     // template length minus the three template tokens, e.g. ~}} and a space before
     return template.substring(4, template.length - 4);
 }
+export function getPropertyNames(template) {
+    const properties = [];
 
-export function getPropertyNames(template, properties = []) {
-    const templateStringEnd = template.indexOf('}}');
+    const jetTemplates = template.match(propertyRegex);
 
-    if (templateStringEnd === -1) {
-        return properties;
+    for (const jetTemplate of jetTemplates) {
+        const propertyName = getPropertyName(jetTemplate);
+
+        /** Check if we got a part of a loop, template or if statement, if so ignore */
+        const logicSymbols = ['%', '#', '~', '$'];
+        const lastCharacter = propertyName[propertyName.length - 1];
+        if (!logicSymbols.includes(lastCharacter)) {
+            properties.push(propertyName);
+        }
     }
-
-    const propertyName = getPropertyName(template.substring(0, templateStringEnd + 2));
-
-    /** Check if we got a part of a loop, template or if statement, if so ignore */
-    const logicSymbols = ['%', '#', '~'];
-    const lastCharacter = propertyName[propertyName.length - 1];
-    if (!logicSymbols.includes(lastCharacter)) {
-        properties.push(propertyName);
-    }
-    return getPropertyNames(template.substring(templateStringEnd + 2), properties);
+    return properties;
 }
 
 export function getPropertyName(template) {
@@ -150,6 +156,11 @@ export function getPropertyName(template) {
         case '~': {
             const regexParts = roughTemplate.match(conditionalPropertyRegex);
             property = regexParts[1];
+            break;
+        }
+        case '$': {
+            const regexParts = roughTemplate.match(viewmodelWrapperPropertyRegex);
+            property = regexParts[2];
             break;
         }
         default: {
