@@ -106,8 +106,6 @@ export function getInnerTemplate(template) {
     // template length minus the three template tokens, e.g. ~}} and a space before
     return template.substring(4, template.length - 4);
 }
-
-// needs to be smarter
 export function getPropertyNames(template) {
     const properties = [];
 
