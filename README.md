@@ -35,7 +35,7 @@
 
 # 1. JET
 JET stands for Jelmer's Easy Templating. I have created this library 
-because I could not find a good library that is very small (jet.min.js is ~6kb! pre-gzip)
+because I could not find a good library that is very small (jet.min.js is ~8kb! pre-gzip)
 and that is not bulky with too many features. doT.js came very close, but its syntax was
 bulky. Try JET here in this repl: https://pennions.github.io/JET/
 
