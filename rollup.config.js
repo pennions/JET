@@ -1,6 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 
-export default {
+export default [{
     input: 'src/jet.js',
     output: {
         name: 'jet',
@@ -8,4 +8,12 @@ export default {
         format: 'umd'
     },
     plugins: [commonjs()]
-};
+}, {
+    input: 'src/jet.js',
+    output: {
+        name: 'jet',
+        file: 'dist/jet.es.js',
+        format: 'es'
+    },
+    plugins: [commonjs()]
+}];
