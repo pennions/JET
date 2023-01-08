@@ -1,8 +1,13 @@
 {
   "name": "@pennions/jet",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A semantic templating engine inspired by doT.js",
-  "main": "./src/jet.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/jet.js",
+  "module": "./dist/jet.es.js",
   "scripts": {
     "dev": "vite",
     "build": "rollup --config rollup.config.js",
