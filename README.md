@@ -30,6 +30,7 @@
     - [8.1. Get value](#81-get-value)
     - [8.2. Watchers](#82-watchers)
     - [8.3. Adding event listeners](#83-adding-event-listeners)
+- [9. Support us](#9-support-us)
 
 <!-- /TOC -->
 
@@ -763,3 +764,11 @@ Shorthand for ```document.getElementById(id).removeEventListener(event, eventFun
 ```
 jet.removeEvent(id, event, eventFunction, options?);
 ```
+
+
+# 9. Support us
+
+> If you are using this for paid products and services please consider:
+> - Becoming a supporter on [Patreon.com](https://patreon.com/pennions)
+> - Doing a one time donation on [Ko-Fi](https://ko-fi.com/pennions). 
+> - If you want to donate but are not able to do so on these platforms, please contact us at www.pennions.com so we can provide an iDeal link.
