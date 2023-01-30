@@ -286,6 +286,13 @@ export const get = function (property) {
     return _getValue(window._jetViewmodel, property.split('.'));
 };
 
+/**
+ * @returns a hard copy of the current viewmodel
+ */
+export const getViewmodel = function () {
+    return Object.assign({}, window._jetViewmodel);
+};
+
 export const compile = function (template, viewmodel) {
     let compiledTemplate = resolveTemplate(template, viewmodel);
     return interpolate(compiledTemplate, viewmodel);
