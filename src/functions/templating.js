@@ -111,6 +111,8 @@ export function getPropertyNames(template) {
 
     const jetTemplates = template.match(propertyRegex);
 
+    if (!jetTemplates) return properties;
+
     for (const jetTemplate of jetTemplates) {
         const propertyName = getPropertyName(jetTemplate);
 

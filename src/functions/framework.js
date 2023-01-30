@@ -206,12 +206,36 @@ function _findAndStorePropertyData(template) {
     }
 }
 
+function placePartialInDom(childNode, template) {
+    const parser = new DOMParser();
+    const identifier = _findAndStorePropertyData(template);
+    const innerTemplate = resolveTemplate(template, window._jetViewmodel);
+    const html = parser.parseFromString(innerTemplate, 'text/html');
+
+    const partialElement = html.body.firstChild;
+    partialElement.setAttribute(`data-jet-${identifier}`, '');
+
+    /** if we just pulled out the container and there is no element inside
+     * treat is as text and add that to a span for reactiveness
+     */
+    if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
+        const spanEl = document.createElement('span');
+        spanEl.innerText = partialElement.innerText;
+        partialElement.innerText = '';
+        partialElement.appendChild(spanEl);
+    }
+
+    childNode.parentNode.replaceChild(partialElement, childNode);
+}
+
 /**
  * Initializes JET as a lightweight framework
  * @param {string} elementId id of the element that you want to render
  * @param {object} viewmodel the viewmodel to use to render
  */
 export const init = function (elementId, viewmodel, onrendered) {
+    const hasJetcomponents = viewmodel?.jet_components !== undefined;
+
     /** Needs to be initialized only once. but the function can be used to render partials. */
     if (viewmodel) {
         window._jetViewmodel = _createPennionsModel(Object.assign(window._jetViewmodel, viewmodel));
@@ -221,37 +245,36 @@ export const init = function (elementId, viewmodel, onrendered) {
     /** The first initialization is actually an ID */
     if (rootElement === null) {
         rootElement = document.getElementById(elementId);
+        
+        /** solve all jet-components first */
+        if (hasJetcomponents) {
+            const componentsToFind = Object.keys(viewmodel.jet_components);
 
+            do {
+                for (const component of componentsToFind) {
+                    const jcNodes = document.querySelectorAll(`jc-${component}`);
+                    if (jcNodes.length) {
+                        for (const jcNode of jcNodes) {
+                            const nodeTemplate = viewmodel.jet_components[component];
+                            placePartialInDom(jcNode, nodeTemplate);
+                        }
+                    }
+                }
+            }
+            while (rootElement.innerHTML.includes("<jc-"));
+        }
 
         /** Check for partials that have no root element */
         const { childNodes } = rootElement;
 
-        const parser = new DOMParser();
-
         childNodes.forEach((child) => {
             if (child.nodeName === '#text' && child.textContent.includes('{{#')) {
-
                 const cleanedTemplate = child.textContent.trim();
-                const identifier = _findAndStorePropertyData(cleanedTemplate);
-                const innerTemplate = resolveTemplate(cleanedTemplate, window._jetViewmodel);
-                const html = parser.parseFromString(innerTemplate, 'text/html');
-
-                const partialElement = html.body.firstChild;
-                partialElement.setAttribute(`data-jet-${identifier}`, '');
-
-                /** if we just pulled out the container and there is no element inside
-                 * treat is as text and add that to a span for reactiveness
-                 */
-                if (partialElement.innerText?.length && partialElement.innerText[0] === '{') {
-                    const spanEl = document.createElement('span');
-                    spanEl.innerText = partialElement.innerText;
-                    partialElement.innerText = '';
-                    partialElement.appendChild(spanEl);
-                }
-
-                child.parentNode.replaceChild(partialElement, child);
+                placePartialInDom(child, cleanedTemplate);
             }
         });
+
+
     }
     /** now compile everything */
     const { children } = rootElement;

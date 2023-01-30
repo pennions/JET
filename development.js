@@ -25,10 +25,25 @@ const vm = {
     nested: {
         message: 'Hello from nested property!'
     },
+    i18n: {
+        en: {
+            button_primary: "Button primary text"
+        }
+    },
     message: 'Hello world!',
     hello_world: `<div>
     {{ message }}
-    </div>`
+    </div>`,
+    jet_components: {
+        'button-primary': /*html*/ `<button>
+        {{$ from i18n.en
+            {{ button_primary }}
+        $}}
+</button>`,
+        'button-panel': /*html*/ `<div>
+    <jc-button-primary></jc-button-primary>
+</div>`
+    }
 };
 
 init('app', vm);
