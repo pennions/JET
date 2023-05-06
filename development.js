@@ -1,5 +1,4 @@
-import { init, watch } from './src/functions/framework';
-import { update, get } from './src/functions/framework';
+import { init, watch, update, get } from './src/jet';
 
 window.jet = {};
 window.jet.update = update;
