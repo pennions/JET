@@ -3,7 +3,7 @@ import { resolveLoop } from './loop';
 import { resolveConditional } from './conditional';
 import { resolveTemplateWrapper } from './viewmodelWrapper';
 
-/** Constructs the template and make sit ready for interpolation */
+/** Constructs the template and makes it ready for interpolation */
 export function buildTemplate(template, viewmodel) {
     let newTemplate = resolvePartials(template, viewmodel);
     newTemplate = resolveTemplateWrapper(newTemplate);
