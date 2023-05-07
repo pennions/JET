@@ -12,7 +12,7 @@
         <script src="js/matchbrackets.min.js"></script>
         <script src="js/continuecomment.min.js"></script>
         <script src="js/comment.min.js"></script>
-        <script src="js/jet.min.js"></script>
+        <script src="../dist/jet.js"></script>
 
         <script>
             window.onload = () => {
@@ -40,11 +40,14 @@
                         if (!template) {
                             contents = 'No template found';
                         } else {
-                            contents = jet.compile(template, vm);
+                            contents = jet.render(template, vm);
                         }
 
                         if (contents) {
-                            setContents('build', jet.build(template, vm));
+                            setContents(
+                                'build',
+                                jet.buildTemplate(template, vm)
+                            );
                         }
                     } catch (e) {
                         contents = e;
@@ -55,13 +58,13 @@
                 setContents('template', '<h1>Hi! {{ welcome_text }}</h1>');
                 setContents(
                     'build',
-                    jet.build('<h1>Hi! {{ welcome_text }}</h1>', {
+                    jet.buildTemplate('<h1>Hi! {{ welcome_text }}</h1>', {
                         welcome_text: 'Welcome to JET templating!'
                     })
                 );
                 setContents(
                     'render',
-                    jet.compile('<h1>Hi! {{ welcome_text }}</h1>', {
+                    jet.render('<h1>Hi! {{ welcome_text }}</h1>', {
                         welcome_text: 'Welcome to JET templating!'
                     })
                 );
@@ -81,11 +84,14 @@
                             if (!template) {
                                 contents = 'No template found';
                             } else {
-                                contents = jet.compile(template, vm);
+                                contents = jet.render(template, vm);
                             }
 
                             if (contents) {
-                                setContents('build', jet.build(template, vm));
+                                setContents(
+                                    'build',
+                                    jet.buildTemplate(template, vm)
+                                );
                             }
                         } catch (e) {
                             contents = e;
@@ -113,13 +119,13 @@
         </div>
         <div class="repl-row">
             <div class="repl-container">
-                <label><b>Build</b><i> Output of jet.build()</i></label>
+                <label><b>Build</b><i> Output of jet.buildTemplate()</i></label>
                 <textarea id="build" class="repl-input"></textarea>
             </div>
             <div class="repl-container">
                 <label
                     ><b>Render</b>
-                    <i>Output of jet.render() or jet.compile()</i>
+                    <i>Output of jet.render() or jet.interpolateTemplate()</i>
                 </label>
                 <textarea id="render" class="repl-input"></textarea>
             </div>

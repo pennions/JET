@@ -1,6 +1,7 @@
 import { propertyRegex, escapeHtml, getPropertyValue } from './templating';
 
-export function interpolate(template, object) {
+/** Fills in all the property values */
+export function interpolateTemplate(template, object) {
     return template.replace(propertyRegex, (_, p1) => {
         let replacement = '';
 
