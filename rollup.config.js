@@ -17,7 +17,6 @@ export default [{
     },
     plugins: [commonjs()]
 },
-
 {
     input: 'src/jet.js',
     output: {
