@@ -375,6 +375,7 @@ JSON model:
             ...
         }
     ... 
+    }
 ```
 
 Example template:
