@@ -1,5 +1,5 @@
 
-import { interpolate } from "../src/functions/interpolation";
+import { interpolateTemplate } from "../src/functions/interpolation";
 
 const template = "<div>{{ variableB }} {{variableC}} {{variableA}}</div>";
 
@@ -11,7 +11,7 @@ describe('Template variable interpolation', () => {
             variableC: 'Interpolation'
         };
 
-        expect(interpolate(template, templateObject)).toBe('<div>Great! Interpolation works.</div>');
+        expect(interpolateTemplate(template, templateObject)).toBe('<div>Great! Interpolation works.</div>');
     });
 
     it('can add nested values', () => {
@@ -25,7 +25,7 @@ describe('Template variable interpolation', () => {
             }
         };
 
-        expect(interpolate(template, templateObject)).toBe('<div>Great! Nested interpolation works.</div>');
+        expect(interpolateTemplate(template, templateObject)).toBe('<div>Great! Nested interpolation works.</div>');
     });
 
     it('can escape html', () => {
@@ -35,6 +35,6 @@ describe('Template variable interpolation', () => {
             myExample: '<p>This HTML is for a code example</p>',
         };
 
-        expect(interpolate(template, templateObject)).toBe('<pre><code>&lt;p&gt;This HTML is for a code example&lt;/p&gt;</code></pre>');
+        expect(interpolateTemplate(template, templateObject)).toBe('<pre><code>&lt;p&gt;This HTML is for a code example&lt;/p&gt;</code></pre>');
     });
 });

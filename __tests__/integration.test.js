@@ -1,4 +1,4 @@
-import { compile } from "../src/functions/framework";
+import { render } from "../src/functions/render";
 import { cleanHtml } from "../src/functions/templating";
 
 describe('Test inteprolating after resolving conditionals and/or loops', () => {
@@ -10,7 +10,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             item: ["Item1", "Item2", "Item3"],
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('correctly renders an array with objects', () => {
@@ -20,7 +20,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             item: [{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }],
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('renders a nested loop correctly', () => {
@@ -30,7 +30,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             list: [[{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }]],
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('renders a nested loop correctly if it is multi-line', () => {
@@ -48,7 +48,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             list: [[{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }]],
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<div>TestDiv</div><ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('renders a nested if correctly', () => {
@@ -60,7 +60,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             }
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<h1>Some item:</h1><p>Nested is tested</p>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<h1>Some item:</h1><p>Nested is tested</p>");
     });
 
     it('renders a nested if correctly when template is multi-line', () => {
@@ -78,7 +78,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
             }
         };
 
-        expect(cleanHtml(compile(template, templateObject))).toBe("<h1>Some item: </h1><p>Nested is tested</p>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<h1>Some item: </h1><p>Nested is tested</p>");
     });
 
     it('renders a loop from a nested property', () => {
@@ -89,7 +89,7 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
                 list: [{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }],
             }
         };
-        expect(cleanHtml(compile(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>");
     });
 
     it('can render a view with partials', () => {
@@ -108,6 +108,6 @@ describe('Test inteprolating after resolving conditionals and/or loops', () => {
         {{# partials.username #}}
         {{# partials.shoppingList #}}
         `;
-        expect(cleanHtml(compile(template, templateObject))).toBe("<div>Jet</div><ul><li> Carrot </li><li> Melon </li><li> Potato </li></ul>");
+        expect(cleanHtml(render(template, templateObject))).toBe("<div>Jet</div><ul><li> Carrot </li><li> Melon </li><li> Potato </li></ul>");
     });
 });
