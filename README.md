@@ -70,13 +70,13 @@ or from a CDN like unpkg:
 ## 2.2. In NodeJS as ES6 module
 
 ```
-import { compile } from 'js/jet.min.js';
+import { render } from 'js/jet.min.js';
 ```
 
 Or
 
 ```
-import { render, build } from 'js/jet.min.js';
+import { buildTemplate, interpolateTemplate } from 'js/jet.min.js';
 ```
 
 &nbsp;

@@ -3,9 +3,4 @@
  */
 export { buildTemplate } from './functions/buildTemplate';
 export { interpolateTemplate } from './functions/interpolation';
-
-/** Builds the template and interpolates it */
-export function render(template, viewmodel) {
-    let compiledTemplate = jet.buildTemplate(template, viewmodel);
-    return jet.interpolateTemplate(compiledTemplate, viewmodel);
-};
+export { render } from './functions/render';

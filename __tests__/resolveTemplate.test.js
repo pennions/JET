@@ -1,7 +1,7 @@
-import { resolveTemplate } from "../src/functions/resolveTemplate";
+import { buildTemplate } from "../src/functions/buildTemplate";
 import { cleanHtml } from "../src/functions/templating";
 
-const template = `
+const testTemplate = `
 <main>
     {{~ if articles.0
         <section>
@@ -35,10 +35,10 @@ const viewModel = {
 
 describe('Resolving of constructed templates', () => {
     it('can resolve a template with nested statements', () => {
-        let resolvedTemplate = resolveTemplate(template, viewModel);
+        let template = buildTemplate(testTemplate, viewModel);
         // for easier assertion
-        resolvedTemplate = cleanHtml(resolvedTemplate);
-        expect(resolvedTemplate).toBe("<main><section><article><h1>{{articles.0.header}}</h1><p>{{articles.0.text}}</p></article><article><h1>{{articles.1.header}}</h1><p>{{articles.1.text}}</p></article><article><h1>{{articles.2.header}}</h1><p>{{articles.2.text}}</p><footer>{{articles.2.footer}}</footer></article></section></main>");
+        template = cleanHtml(template);
+        expect(template).toBe("<main><section><article><h1>{{articles.0.header}}</h1><p>{{articles.0.text}}</p></article><article><h1>{{articles.1.header}}</h1><p>{{articles.1.text}}</p></article><article><h1>{{articles.2.header}}</h1><p>{{articles.2.text}}</p><footer>{{articles.2.footer}}</footer></article></section></main>");
     });
 
     it('can resolve a template with all kinds of statements', () => {
@@ -73,16 +73,16 @@ describe('Resolving of constructed templates', () => {
 
         const expectedTemplate = `<main><section>{{ message }}<div>{{ message }}</div>{{ list.0 }}{{ list.1 }}{{ list.2 }}<div>{{ nested.message }}</div></section></main>`;
 
-        let resolvedTemplate = resolveTemplate(completeTemplate, completeVM);
+        let template = buildTemplate(completeTemplate, completeVM);
 
         /** getting weird spacing errors when trying to compare. so eliminate it all! */
-        resolvedTemplate = resolvedTemplate.replace(/\n/gim, '');
-        resolvedTemplate = resolvedTemplate.replace(/[}](\s+)[<]/gim, '}<');
-        resolvedTemplate = resolvedTemplate.replace(/[>](\s+)[{]/gim, '>{');
-        resolvedTemplate = resolvedTemplate.replace(/[}](\s+)[{]/gim, '}{');
-        resolvedTemplate = resolvedTemplate.replace(/[>](\s+)[<]/gim, '><');
+        template = template.replace(/\n/gim, '');
+        template = template.replace(/[}](\s+)[<]/gim, '}<');
+        template = template.replace(/[>](\s+)[{]/gim, '>{');
+        template = template.replace(/[}](\s+)[{]/gim, '}{');
+        template = template.replace(/[>](\s+)[<]/gim, '><');
 
 
-        expect(resolvedTemplate).toBe(expectedTemplate);
+        expect(template).toBe(expectedTemplate);
     });
 });
