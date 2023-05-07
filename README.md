@@ -23,14 +23,10 @@
     - [6.5. Viewmodel wrappers](#65-viewmodel-wrappers)
         - [6.5.1 Syntax](#651-syntax)
 - [7. Functions](#7-functions)
-    - [7.1. build](#71-build)
-    - [7.2. render](#72-render)
-    - [7.3. compile](#73-compile)
-- [8. JET Framework](#8-jet-framework)
-    - [8.1. Get value](#81-get-value)
-    - [8.2. Watchers](#82-watchers)
-    - [8.3. Adding event listeners](#83-adding-event-listeners)
-- [9. Support us](#9-support-us)
+    - [7.1. buildTemplate](#71-buildtemplate)
+    - [7.2. interpolateTemplate](#72-interpolatetemplate)
+    - [7.3. Render](#73-render)
+- [8. Support us](#8-support-us)
 
 <!-- /TOC -->
 
@@ -235,7 +231,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -282,7 +278,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -329,7 +325,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -392,7 +388,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -426,7 +422,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -471,7 +467,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -514,7 +510,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.compile(template, vm);
+const renderedTemplate = jet.render(template, vm);
 ```
 
 Output:
@@ -578,11 +574,11 @@ Now it will resolve to:
 
 There are three functions exposed in the library:
 
-* build
+* buildTemplate
+* interpolateTemplate
 * render
-* compile
 
-## 7.1. build
+## 7.1. buildTemplate
 
 Build is the pre-render step.
 It takes a template and a viewmodel and returns a new template with all the property paths resolved.
@@ -611,7 +607,7 @@ Example template:
 Run:
 
 ```
-const buildTemplate = jet.build(template, vm);
+const buildTemplate = jet.buildTemplate(template, vm);
 ```
 
 Output:
@@ -630,7 +626,7 @@ Output:
 </ul>
 ```
 &nbsp;
-## 7.2. render
+## 7.2. interpolateTemplate
 This step will fill in the property values and return html.
 It takes a template from the build step and the viewmodel which was used.
 
@@ -661,7 +657,7 @@ Example template:
 Run:
 
 ```
-const renderedTemplate = jet.render(template, vm);
+const interpolatedTemplate = jet.interpolateTemplate(template, vm);
 ```
 
 Output:
@@ -680,93 +676,11 @@ Output:
 </ul>
 ```
 &nbsp;
-## 7.3. compile
-Compile is a function that combines build and render steps.
+## 7.3. Render
+Render is a function that combines buildTemplate and interpolateTemplate steps.
 &nbsp;
-# 8. JET Framework
-Included in jet is a reactive framework which you can use to not only build and interpolate your template, but also update the it on-the-fly in the browser!
 
-You have only need two commands.
-
-One for the initialization. It takes two required arguments: 
-```
-jet.init('app', vm);
-```
-
-You can also pass a function as a third argument. This will be called after everything has been initialized.
-
-*'app'* is an element id, in which you did all your templating and vm is a viewmodel.
-
-> example viewmodel:
-```
-const vm = {
-    shoppingList: {
-        groceryStore: ['Carrot', 'Melon', 'Potato']
-    },
-    a: {
-        b: {
-            c: 1337
-        }
-    },
-    message: 'Hello world!',
-    hello_world: '<div>{{ message }}</div>'
-};
-```
-
-After you initialized the framework, you can use the following command to update the template with a new value:
-
-```
-jet.update('a.b.c', 42);
-``` 
-
-*'a.b.c* is the complete path in the vm, so in this example, *c* is nested under *b* which is nested under *a*.
-
-Another valid example would be:
-
-```
-jet.update('hello_world', '<h1>{{ message }}</h1>')
-```
-
-It works just like you would access a property from a JSON object.
-
-In the above example you are setting a new template. Which will now be rendered. This is useful for having router functionality. 
-
-You could write your own router to fetch a new template on demand and update your viewmodel. All the properties inside will also become reactive!
-
-
-## 8.1. Get value
-You can use the following command to retrieve the current value of a property inside the reactive viewmodel:
-
-```
-jet.get('a.b.c');
-```
-
-Where *a.b.c* is the complete property path.
-
-## 8.2. Watchers
-You can do a function when a value changes, it will pass the new value as an argument:
-
-```
-jet.watch('a.b.c', myFunction(newValue) => console.log(newValue));
-```
-
-**N.B.** if the value is nested and you update it like ```'a.b.c'``` it will only trigger when you watch it with ```'a.b.c'``` parameter and *not* for instance if you do ```jet.update('a.b', { c: 'newString' } );```
-
-## 8.3. Adding event listeners
-Shorthand for ```document.getElementById(id).addEventListener(event, eventFunction, options?)```:
- 
-```
-jet.addEvent(id, event, eventFunction, options?);
-```
-
-Shorthand for ```document.getElementById(id).removeEventListener(event, eventFunction, options?)```:
- 
-```
-jet.removeEvent(id, event, eventFunction, options?);
-```
-
-
-# 9. Support us
+# 8. Support us
 
 > If you are using this for paid products and services please consider:
 > - Becoming a supporter on [Patreon.com](https://patreon.com/pennions)
